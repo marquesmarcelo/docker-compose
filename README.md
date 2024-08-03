@@ -29,3 +29,15 @@ Para acessar a console de determinado contêiner
 ```bash
 docker exec -it nome_container /bin/bash
 ```
+Limpar o docker
+
+```bash
+docker stop $(docker ps -q)
+docker system prune -a --volumes
+```
+
+Compilar container usado por um docker compose
+
+```bash
+docker compose up --build
+```
