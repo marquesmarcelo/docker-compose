@@ -1,0 +1,32 @@
+version: '3.5'
+
+services:
+  bind9-primary:
+    restart: always
+    image: labbsr0x/dns-bind9
+    networks:
+      bind9-net:
+        ipv4_address: 192.168.20.10
+    ports:
+      - "5353:53/udp"
+      - "5353:53/tcp"
+    volumes:
+      - ./primary:/data
+  bind9-secondary:
+    restart: always
+    image: labbsr0x/dns-bind9
+    networks:
+      bind9-net:
+        ipv4_address: 192.168.20.20
+    ports:
+    - "5453:53/udp"
+    - "5453:53/tcp"
+    volumes:
+      - ./secondary:/data
+    depends_on:
+      - bind9-primary
+networks:
+  bind9-net:
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24

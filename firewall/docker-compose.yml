@@ -1,0 +1,49 @@
+version: '3.7'
+
+services:
+  firewall:
+    image: ubuntu:latest
+    container_name: firewall
+    privileged: true
+    networks:
+      internal:
+        ipv4_address: 192.168.10.10
+      external:
+        ipv4_address: 192.168.20.10
+    cap_add:
+      - NET_ADMIN
+    volumes:
+      - ./firewall.rules:/opt/firewall.rules
+    command: ["sh", "-c", "sysctl -w net.ipv4.ip_forward=1 && apt update && apt install -y iptables iputils-ping net-tools iproute2 && while true; do sleep 1000; done"]
+
+  container_a:
+    image: ubuntu:latest
+    container_name: container_a
+    networks:
+      internal:
+        ipv4_address: 192.168.10.2
+    cap_add:
+      - NET_ADMIN
+    command: ["sh", "-c", "apt update && apt install -y iputils-ping iproute2 telnet nginx && ip route add 192.168.20.0/24 via 192.168.10.10 && nginx -g 'daemon off;'"]
+        
+  container_b:
+    image: ubuntu:latest
+    container_name: container_b
+    networks:
+      external:
+        ipv4_address: 192.168.20.2
+    cap_add:
+      - NET_ADMIN    
+    command: ["sh", "-c", "apt update && apt install -y iputils-ping iproute2 telnet nginx && ip route add 192.168.10.0/24 via 192.168.20.10 && nginx -g 'daemon off;'"]
+
+networks:
+  internal:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.10.0/24
+  external:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.20.0/24

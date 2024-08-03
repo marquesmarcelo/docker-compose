@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  web1:
+    build: .
+    container_name: web1
+    ports:
+      - "8001:80"
+
+  web2:
+    build: .
+    container_name: web2
+    ports:
+      - "8002:80"
+
+  load_balancer:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf
+
+networks:
+  default:
+    driver: bridge

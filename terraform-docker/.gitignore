@@ -1,0 +1,22 @@
+# Terraform files
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*
+*.tfvars
+*.tfvars.json
+.terraform/
+.terraform.lock.hcl
+terraform.tfstate.backup
+
+# Ignore editor specific files
+*.swp
+*.swo
+*.bak
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore sensitive files
+private.pem

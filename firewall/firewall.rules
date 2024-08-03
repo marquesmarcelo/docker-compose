@@ -1,0 +1,20 @@
+#!/bin/bash
+# Limpar regras existentes
+iptables -F
+iptables -t nat -F
+
+# Políticas padrão de rejeição
+iptables -P INPUT DROP
+iptables -P FORWARD DROP
+iptables -P OUTPUT ACCEPT
+
+# Permitir loopback
+iptables -A INPUT -i lo -j ACCEPT
+iptables -A OUTPUT -o lo -j ACCEPT
+
+# Permitir conexões estabelecidas e relacionadas
+iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT
+iptables -A FORWARD -m state --state ESTABLISHED,RELATED -j ACCEPT
+
+# Permitir novas conexões HTTP (sem usar conntrack)
+iptables -A FORWARD -s 192.168.10.0/24 -d 192.168.20.2 -p tcp --dport 80 -j ACCEPT

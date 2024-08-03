@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+  master:
+    build: .
+    container_name: master
+    hostname: master
+    volumes:
+      - ./ansible:/etc/ansible
+      - ./ssh_config/master:/root/.ssh/id_rsa
+      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+    ports:
+      - "2222:22"
+
+  node1:
+    build: .
+    container_name: node1
+    hostname: node1
+    volumes:
+      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+    ports:
+      - "2223:22"
+
+  node2:
+    build: .
+    container_name: node2
+    hostname: node2
+    volumes:
+      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+    ports:
+      - "2224:22"
+
+networks:
+  default:
+    driver: bridge
