@@ -2,6 +2,8 @@
 
 Arquitetura Safe: https://community.cisco.com/t5/blogues-de-seguran%C3%A7a/o-que-%C3%A9-cisco-safe/ba-p/4894976
 
+https://www.ciscopress.com/articles/article.asp?p=2202410
+
 ## Cancelar um comando CISCO travado
 
 ```ios
