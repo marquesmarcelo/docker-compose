@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  packetfence:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: packetfence
+    privileged: true
+    network_mode: bridge
+    volumes:
+      - pf_data:/usr/local/pf
+      - pf_logs:/var/log/packetfence
+    ports:
+      - "80:80"       # HTTP
+      - "443:443"     # HTTPS
+      - "1812:1812/udp"  # RADIUS Authentication
+      - "1813:1813/udp"  # RADIUS Accounting
+      - "1194:1194/udp"  # OpenVPN
+      - "3306:3306"   # MySQL
+    restart: unless-stopped
+
+volumes:
+  pf_data:
+    driver: local
+  pf_logs:
+    driver: local
