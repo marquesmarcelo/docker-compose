@@ -1,83 +1,58 @@
-# Hardening Switch
+# Checklist de Hardening para Switch
 
-1. Atualização de Firmware
+## **1. Atualizações e Configurações Iniciais**
+- [ ] **Atualizou o Firmware** do switch para a versão mais recente.
+- [ ] **Configurou Senhas Fortes** para todos os acessos administrativos e de console. Cadastrou as senhas no chaveiro central
+- [ ] **Usou Chaveiro (SSH Key)** para autenticação, desabilitando senhas em configurações de SSH.
+- [ ] **Habilitou autenticação via TACACS+ ou RADIUS** para gerenciamento centralizado de credenciais.
 
-2. Configuração de Senhas Fortes e uso de chaveiro
+## **2. Acessos e Protocolos**
+- [ ] **Habilitou SSH** para acesso remoto seguro, configurando 30s de **timeout de sessão** para desconectar sessões ociosas após inatividade.
+- [ ] **Desabilitou Telnet, HTTP e outros serviços desnecessários**.
+- [ ] **Desabilitou CDP e LLDP** caso não seja necessário para sua rede.
+- [ ] **Restrigiu o acesso de gerenciamento** apenas a **endereços IP confiáveis**.
+- [ ] **Habilitou autenticação 802.1X** (e MAB para dispositivos sem suporte ao 802.1X).
+  
+## **3. Proteção contra Ataques**
+- [ ] **Habilitou Port Security** para limitar em 3 o número de endereços MAC aprendidos por porta.
+- [ ] **Habilitou DHCP Snooping** para prevenir ataques de spoofing de DHCP.
+- [ ] **Habilitou Dynamic ARP Inspection (DAI)** para prevenir ataques de ARP spoofing.
+- [ ] **Habilitou IP Source Guard** para prevenir ataques de IP spoofing.
+- [ ] **Habilitou BPDU Guard** nas portas de acesso para proteger contra ataques no protocolo STP.
+- [ ] **Habilitou Root Guard** para proteger a raiz da árvore STP.
+- [ ] **Configurou o switch Core como o Root** no Spanning Tree Protocol.
+- [ ] **Habilitou o BPDU Filter** para evitar que portas de acesso enviem BPDUs.
+- [ ] **Habilitou o Storm Control** para limitar tráfego de broadcast, multicast e unicast excessivo.
+- [ ] **Habilitou RA Guard e DHCPv6 Snooping** para segurança de IPv6.
+  
+## **4. Controle e Gerenciamento de Tráfego**
+- [ ] **Habilitou IGMP Snooping** para otimizar o tráfego multicast.
+- [ ] **Configurou QoS (Quality of Service)** para priorizar o tráfego crítico e prevenir DoS.
+- [ ] **Habilitou EtherChannel** com LACP para melhorar a redundância e desempenho de links agregados.
 
-3. Habilite a autenticação via TACACS+ ou RADIUS para gerenciamento centralizado de credenciais.
+## **5. Segurança de Logs e Monitoramento**
+- [ ] **Configuração de Logging** para envio de logs a um servidor centralizado.
+- [ ] **Configurou alertas para eventos críticos** e monitoramento contínuo de atividades suspeitas.
+- [ ] **Segurança de SNMP**: Configuração de comunidade pública no SNMPv3 com autenticação e criptografia (ou SNMPv2 com segurança limitada, se SNMPv3 não for possível).
+- [ ] **Restrigiu o acesso SNMP** apenas a endereços IP confiáveis.
 
-4. Desabilitação de Serviços Desnecessários: HTTP; Telnet; CDP (Cisco Discovery Protocol); LLDP
+## **6. Proteção Física e Acessos Locais**
+- [ ] **Controle de Acesso Físico**: Garante que os switches estão em locais seguros e com acesso restrito a pessoal autorizado.
+- [ ] **Segurança de Console**: Configurou senhas seguras e usou chaveiro para acesso ao console, desabilitando o acesso não autorizado.
 
-Configuração de Acesso Seguro SSH com timeout de sessão para desconectar sessões ociosas após um período de inatividade.
+## **7. Configurações de VLANs e Segmentação de Rede**
+- [ ] **Segmentou VLANs** de acordo com a política, limitando a quantidade de dispositivos por VLAN (máximo 256 dispositivos).
+- [ ] **Configurou Inter-VLAN Routing** de forma segura.
+- [ ] **Configurou VLAN Trunking Protocol (VTP)** em modo transparente, se necessário (apenas switches Cisco).
+- [ ] **Desabilitou o Trunking Automático (DTP)** nas portas que não necessitam de trunking.
 
-Configuração de Distribuição Automática de VLANs com VLAN Trunking Protocol (VTP) - Apenas switches CISCO
+## **8. Backup e Sincronização**
+- [ ] **Realizou backups regulares** das configurações do switch.
+- [ ] **Configurou NTP** para sincronizar com servidores NTP confiáveis e usar autenticação NTP.
 
-Desative o trunking automático (DTP) em portas que não precisam de trunking.
+## **9. Configurações Avançadas**
+- [ ] **Habilitou Rapid Spanning Tree Protocol (RSTP)** ou Multiple Spanning Tree Protocol (MSTP).
+- [ ] **Habilitou Portas de Backup e Redundância** quando necessário, para garantir a alta disponibilidade da rede.
 
-Habilite o BPDU Guard em portas de acesso para evitar ataques de Spanning Tree Protocol (STP).
-
-Configuração do Switch Core como STP Root
-
-Habilite o Root Guard para proteger a raiz da árvore STP.
-
-Habilitação de Port Security para limitar em 3 o número de endereços MAC que podem ser aprendidos em uma porta.
-
-Habilitação de DHCP Snooping parar prevenir ataques de spoofing de DHCP.
-
-Habilitação de Dynamic ARP Inspection (DAI) para prevenir ataques de ARP spoofing.
-
-Configuração de ACLs (Access Control Lists) com objetivo de impedir comunicação entre desktops.
-
-Restrinja o acesso de gerenciamento apenas a endereços IP confiáveis.
-
-Configuração de Logging para envio de logs a servidor centralizado.
-
-Configure SNMP de forma segura, usando SNMPv3 com autenticação e criptografia. Se não possível SNMP v2. Habilitar apenas comunidade de leitura.
-
-Habilitação de Storm Control para limite o tráfego de broadcast, multicast e unicast em portas.
-
-Configuração de Autenticação 802.1X para autenticação baseada em MAC (MAC Authentication Bypass - MAB) para dispositivos que não suportam 802.1X.
-
-Desativação de Portas Não Utilizadas
-
-Habilitação de IGMP Snooping para controle o tráfego multicast.
-
-Habilitação de QoS para priorização do tráfego crítico e evitar ataques de negação de serviço (DoS).
-
-Habilitação de Controles de Segurança para IPv6: RA Guard; DHCPv6 Snooping
-
-Backup Regular das Configurações do Switch
-
-Configure NTP para usar autenticação e sincronize com servidores NTP confiáveis.
-
-Habilitação de MAC Address Notification para monitorar mudanças nos endereços MAC.
-
-Habilitação de Rapid Spanning Tree Protocol (RSTP) ou Multiple Spanning Tree Protocol (MSTP)
-
-Configure BPDU Filter para evitar que portas de acesso enviem BPDUs.
-
-Configuração de Segurança de VTP em modo transparente se precisar usá-lo (apenas em switch CISCO).
-
-Habilitação de EtherChannel para agregar links e melhorar a redundância. Use o protocolo LACP (Link Aggregation Control Protocol) para negociação automática de canais.
-
-Padronização de Fabricante
-
-Segmentação de VLANs: Diminua a quantidade de máquinas em uma VLAN (máximo 256) e configure Inter-VLAN Routing.
-
-Controle de Acesso Físico para assegurar que os switches estejam em locais seguros, com acesso físico restrito apenas a pessoal autorizado.
-
-Segurança de Console configurando senhas seguras para acesso ao console e desative o acesso não autorizado. Colocar as senha no Chaveiro central
-
-Proteção contra Ataques de Spoofing implementando IP Source Guard para prevenir ataques de IP spoofing.
-
-Segurança de Logs
-
-Envie logs para um servidor de logs centralizado e configure alertas para eventos críticos.
-
-Segurança de SNMP
-
-Restrinja o acesso SNMP apenas a endereços IP confiáveis.
-
-Monitoramento Contínuo
-
-Implemente soluções de monitoramento contínuo para detectar e responder a atividades suspeitas em tempo real.
+## **10. Monitoramento e Resposta a Incidentes**
+- [ ] **Implementei soluções de monitoramento contínuo** para detectar e responder a atividades suspeitas em tempo real.
