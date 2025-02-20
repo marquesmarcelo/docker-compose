@@ -53,6 +53,7 @@
 ## **9. Configurações Avançadas**
 - [ ] **Habilitou Rapid Spanning Tree Protocol (RSTP)** ou Multiple Spanning Tree Protocol (MSTP).
 - [ ] **Habilitou Portas de Backup e Redundância** quando necessário, para garantir a alta disponibilidade da rede.
+- [ ] **Configurou playbook no Ansible e adicionou a configuração no git** para controle de implantação das configurações.
 
 ## **10. Monitoramento e Resposta a Incidentes**
 - [ ] **Implementei soluções de monitoramento contínuo** para detectar e responder a atividades suspeitas em tempo real.
