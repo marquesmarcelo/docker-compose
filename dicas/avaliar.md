@@ -79,3 +79,45 @@ hunter.io
 Mostrar principal | Responder
 
 Veja esta mensagem em seu contexto
+
+
+# OSINT Links
+
+https://start.me/p/BPN26q/osint-napratica​
+
+
+# Dorks
+
+🔎 Básico - Pesquisa Específica
+1️⃣ site:gov.br "documento confidencial" → Pesquisa documentos confidenciais em sites do governo brasileiro.
+2️⃣ site:*.mil "restricted" OR "classified" → Pesquisa termos restritos em sites militares.
+3️⃣ intitle:"index of" "backup" → Busca diretórios expostos contendo backups.
+4️⃣ filetype:pdf site:universidade.br "prova" → Encontra provas vazadas de universidades.
+5️⃣ inurl:admin login → Páginas de login administrativas expostas.
+6️⃣ intitle:"index of" passwords → Pastas públicas contendo arquivos de senhas.
+🔥 Intermediário - Arquivos Sensíveis
+7️⃣ ext:sql | ext:txt | ext:xml "password" -github → Pesquisa arquivos contendo senhas.
+8️⃣ filetype:xls OR filetype:csv "email" "password" → Planilhas públicas com credenciais.
+9️⃣ site:pastebin.com "senha" OR "password" → Busca vazamentos no Pastebin.
+🔟 site:drive.google.com OR site:dropbox.com "confidential" → Links públicos para arquivos privados.
+1️⃣1️⃣ site:trello.com "password" OR "login" → Busca credenciais expostas no Trello.
+🚀 Avançado - Cibersegurança & Exploração
+1️⃣2️⃣ inurl:/phpinfo.php → Páginas que exibem configurações sensíveis do PHP.
+1️⃣3️⃣ inurl:wp-config.php → Arquivos de configuração vazados do WordPress.
+1️⃣4️⃣ intitle:"phpMyAdmin" "Welcome to phpMyAdmin" → Instâncias abertas de phpMyAdmin.
+1️⃣5️⃣ ext:log intext:"error.log" OR intext:"php_error" → Logs de erro expostos na web.
+1️⃣6️⃣ inurl:weblogic/console → Consoles WebLogic expostos.
+1️⃣7️⃣ site:pastebin.com OR site:ghostbin.com "ssh private key" → Chaves SSH expostas.
+🎭 Bônus - Dados Pessoais e Segurança
+1️⃣8️⃣ "@gmail.com" filetype:xls OR filetype:csv OR filetype:txt → Vazamentos de emails.
+1️⃣9️⃣ site:linkedin.com/in "CEO" "cybersecurity" → Pesquisa CEOs de empresas de segurança.
+2️⃣0️⃣ site:github.com "DB_PASSWORD" → Busca senhas de bancos de dados expostas no GitHub.
+2️⃣1️⃣ site:shodan.io "default password" → Busca senhas padrão de dispositivos IoT.
+2️⃣2️⃣ inurl:"/webmail" OR inurl:"/roundcube" → Serviços de webmail expostos.
+
+#Bug Bounty
+
+https://chaos.projectdiscovery.io
+
+# Onsint
+https://www.osintdojo.com
