@@ -43,3 +43,39 @@
 | | [https://github.com/technicaldada/pentbox](https://github.com/technicaldada/pentbox) | |
 | | [https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview](https://learn.microsoft.com/en-us/windows/security/threat-protection/windows-sandbox/windows-sandbox-overview) |
 | | [https://www.slavasoft.com/hashcalc/](https://www.slavasoft.com/hashcalc/) | |
+
+	
+Ferramentas e coleções:
+
+#OSINT COLLETION
+
+https://caipora.pro
+
+https://start.me/p/DPYPMz/the-ultimate-osint-collection
+
+https://start.me/p/L1rEYQ/osint4all
+
+https://docs.google.com/spreadsheets/d/18rtqh8EG2q1xBo2cLNyhIDuK9jrPGwYr9DI2UncoqJQ/edit?gid=930747607#gid=930747607
+
+
+# Banco de dados públicos
+
+shodan.io
+
+https://hunter.how
+
+https://fofa.info
+
+https://pulsedive.com/
+
+#Extensão
+
+
+#Email
+https://chromewebstore.google.com/detail/email-extractor/jdianbbpnakhcmfkcckaboohfgnngfcc?pli=1
+
+hunter.io
+
+Mostrar principal | Responder
+
+Veja esta mensagem em seu contexto
