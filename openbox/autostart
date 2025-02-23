@@ -1,0 +1,5 @@
+# Definir o papel de parede com Feh
+feh --bg-scale /usr/share/wallpaper.jpg &
+
+# Iniciar automaticamente algum programa
+xterm &
