@@ -54,6 +54,7 @@ USER root
 
 # Definir a variável DISPLAY para todos os usuários
 RUN echo 'export DISPLAY=:1' >> /etc/profile
+RUN echo 'export XAUTHORITY=~/.Xauthority' >> /etc/profile
 
 # Copiar o papel de parede
 COPY wallpaper.jpg /usr/share/wallpaper.jpg
