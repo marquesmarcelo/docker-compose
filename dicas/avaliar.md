@@ -147,3 +147,231 @@ https://chaos.projectdiscovery.io
 
 # Onsint
 https://www.osintdojo.com
+
+ Aula 03
+
+##Recon Wifi
+wigle.net
+geowifi
+
+# Extesão Recon
+https://chromewebstore.google.com/detail/sputnik/manapjdamopgbpimgojkccikaabhmocd?hl=pt
+
+# RDAP
+
+https://client.rdap.org
+
+curl https://rdap.registro.br/domain/rnp.br
+https://registro.br/rdap/
+
+
+# Wordlist
+https://github.com/danielmiessler/SecLists
+
+# Enumeração de subdominios
+
+ffuf
+gobuster
+sudfinder, assetfinder,
+sublist3r
+
+https://github.com/nmmorette/ScanMaster
+
+#DNS transfer
+https://github.com/nmmorette/bash-scripts/blob/main/dnstransfer.sh
+
+
+#Hack Tricks
+
+https://book.hacktricks.wiki/en/index.html
+
+## Subdomain Takeover
+https://book.hacktricks.wiki/en/pentesting-web/domain-subdomain-takeover.html?highlight=subdomain%20take#subdomain-takeover
+
+https://www.google.com/search?client=opera-gx&q=subdomain+takeover+bug+bounty&sourceid=opera&ie=UTF-8&oe=UTF-8
+
+
+
+## Ferramentas completas
+
+Online
+
+#crt
+
+crt.sh
+
+https://crt.sh/
+
+OSINT
+
+The fastest way to obtain a lot of subdomains is search in external sources. The most used tools are the following ones (for better results configure the API keys):
+
+BBOT
+
+#bbot
+
+# subdomains
+
+```bash
+bbot -t tesla.com -f subdomain-enum
+```
+
+# subdomains (passive only)
+
+```bash
+bbot -t tesla.com -f subdomain-enum -rf passive
+```
+
+# subdomains + port scan + web screenshots
+
+```bash
+bbot -t tesla.com -f subdomain-enum -m naabu gowitness -n my_scan -o .
+```
+
+Amass
+
+```bash
+amass enum [-active] [-ip] -d tesla.com
+amass enum -d tesla.com | grep tesla.com # To just list subdomains
+```
+
+subfinder
+
+# Subfinder, use -silent to only have subdomains in the output
+
+```bash
+./subfinder-linux-amd64 -d tesla.com [-silent]
+```
+findomain
+
+```bash
+# findomain, use -silent to only have subdomains in the output
+./findomain-linux -t tesla.com [--quiet]
+```
+
+OneForAll
+
+```bash
+python3 oneforall.py --target tesla.com [--dns False] [--req False] [--brute False] run
+```
+
+assetfinder
+
+```bash
+assetfinder --subs-only Sudomy
+```
+
+# It requires that you create a sudomy.api file with API keys
+
+```bash
+sudomy -d tesla.com
+```
+
+vita
+```
+vita -d tesla.com
+```
+
+theHarvester
+
+```bash
+theHarvester -d tesla.com -b "anubis, baidu, bing, binaryedge, bingapi, bufferoverun, censys, certspotter, crtsh, dnsdumpster, duckduckgo, fullhunt, github-code, google, hackertarget, hunter, intelx, linkedin, linkedin_links, n45ht, omnisint, otx, pentesttools, projectdiscovery, qwant, rapiddns, rocketreach, securityTrails, spyse, sublist3r, threatcrowd, threatminer, trello, twitter, urlscan, virustotal, yahoo, zoomeye"
+```
+There are other interesting tools/APIs that even if not directly specialised in finding subdomains could be useful to find subdomains, like:
+
+Crobat: Uses the API https://sonar.omnisint.io to obtain subdomains
+
+# Get list of subdomains in output from the API
+
+## This is the API the crobat tool will use
+
+```bash
+curl https://sonar.omnisint.io/subdomains/tesla.com | jq -r ".[]"
+JLDC free API
+curl https://jldc.me/anubis/subdomains/tesla.com | jq -r ".[]"
+RapidDNS free API
+```
+
+# Get Domains from rapiddns free API
+
+```bash
+rapiddns(){
+curl -s "https://rapiddns.io/subdomain/$1?full=1" \
+| grep -oE "[\.a-zA-Z0-9-]+\.$1" \
+| sort -u
+}
+rapiddns tesla.com
+https://crt.sh/
+```
+
+# Get Domains from crt free API
+
+```bash
+crt(){
+curl -s "https://crt.sh/?q=%25.$1" \
+| grep -oE "[\.a-zA-Z0-9-]+\.$1" \
+| sort -u
+}
+crt tesla.com
+gau: fetches known URLs from AlienVault's Open Threat Exchange, the Wayback Machine, and Common Crawl for any given domain.
+```
+
+# Get subdomains from GAUs found URLs
+
+```bash
+gau --subs tesla.com | cut -d "/" -f 3 | sort -u
+SubDomainizer & subscraper: They scrap the web looking for JS files and extract subdomains from there.
+```
+
+# Get only subdomains from SubDomainizer
+
+```bash
+python3 SubDomainizer.py -u https://tesla.com | grep tesla.com
+```
+
+# Get only subdomains from subscraper, this already perform recursion over the found results
+
+```bash
+python subscraper.py -u tesla.com | grep tesla.com | cut -d " " -f
+```
+
+Shodan
+
+# Get info about the domain
+
+```bash
+shodan domain # Get other pages with links to subdomains
+shodan search "http.html:help.domain.com"
+```
+
+Censys subdomain finder
+
+```bash
+export CENSYS_API_ID=...
+export CENSYS_API_SECRET=...
+python3 censys-subdomain-finder.py tesla.com
+```
+
+DomainTrail.py
+
+```bash
+python3 DomainTrail.py -d example.com
+```
+
+securitytrails.com has a free API to search for subdomains and IP history
+
+chaos.projectdiscovery.io
+
+This project offers for free all the subdomains related to bug-bounty programs. You can access this data also using chaospy or even access the scope used by this project https://github.com/projectdiscovery/chaos-public-program-list
+
+You can find a comparison of many of these tools here: https://blog.blacklanternsecurity.com/p/subdomain-enumeration-tool-face-off
+
+# Enumeração automatizada
+
+amass
+
+theharvester
+
+# 403 e 401 Bypass
+
+https://book.hacktricks.wiki/en/network-services-pentesting/pentesting-web/403-and-401-bypasses.html
