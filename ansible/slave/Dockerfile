@@ -1,10 +1,12 @@
 # Usar a imagem base do Ubuntu
 FROM ubuntu:22.04
 
+# Forçar o apt a funcionar em modo não interativo
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Instalar dependências básicas
 RUN apt-get update && \
-    apt-get install -y openssh-server sudo net-tools telnet && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y openssh-server ssh software-properties-common sudo net-tools telnet vim
 
 # Criar o usuário ansible
 RUN useradd -m -s /bin/bash ansible && \
@@ -33,23 +35,10 @@ COPY ./.ssh/id_rsa.pub /home/ansible/.ssh/authorized_keys
 RUN chmod 600 /home/ansible/.ssh/authorized_keys && \
     chown ansible:ansible /home/ansible/.ssh/authorized_keys
 
-# Remover as chaves SSH padrão geradas durante a construção da imagem
-RUN rm -f /etc/ssh/ssh_host_*
-
-# Criar um script para regenerar as chaves SSH no início do contêiner
-RUN echo '#!/bin/bash\n\
-rm -f /etc/ssh/ssh_host_*\n\
-ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""\n\
-ssh-keygen -t ecdsa -b 521 -f /etc/ssh/ssh_host_ecdsa_key -N ""\n\
-ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""\n\
-exec "$@"' > /usr/local/bin/startup.sh
-
-# Tornar o script executável
-RUN chmod +x /usr/local/bin/startup.sh
-
 # Expor a porta SSH
 EXPOSE 22 80
 
-# Definir o comando de inicialização
-ENTRYPOINT ["/usr/local/bin/startup.sh"]
+# limpar o repositorio apt
+RUN  rm -rf /var/lib/apt/lists/*
+
 CMD ["/usr/sbin/sshd", "-D"]

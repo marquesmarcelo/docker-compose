@@ -1,10 +1,10 @@
-[servers]
-vm1 ansible_host=172.20.0.2
-vm2 ansible_host=172.20.0.3
-#vm3 ansible_host=172.20.0.4
+[all]
+vm1
+vm2
+#vm3
 
 [web]
-vm1 ansible_host=172.20.0.2
+vm1
 
 [all:vars]
 ansible_user=ansible

@@ -1,5 +1,5 @@
 ---
-- name: Adicionar chaves SSH dos hosts ao known_hosts local
+- name: Configurar chaves SSH e aplicar hashing ao known_hosts
   hosts: localhost
   become: no
   tasks:
@@ -24,11 +24,17 @@
 
     - name: Coletar chaves SSH das VMs
       shell: |
-        ssh-keyscan -t rsa,ecdsa,ed25519 {{ item }} >> "{{ ansible_user_dir }}/.ssh/known_hosts"
+        ssh-keyscan {{ item }} >> "{{ ansible_user_dir }}/.ssh/known_hosts"
       args:
         executable: /bin/bash
       loop: "{{ groups['all'] }}"
       register: ssh_keyscan_result
+
+    - name: Aplicar hashing ao arquivo known_hosts
+      shell: |
+        ssh-keygen -H -f "{{ ansible_user_dir }}/.ssh/known_hosts"
+      args:
+        executable: /bin/bash
 
     - name: Remover duplicatas do arquivo known_hosts
       shell: |

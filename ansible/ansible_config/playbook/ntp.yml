@@ -1,0 +1,46 @@
+---
+- name: Configurar NTP nos hosts gerenciados
+  hosts: all
+  become: yes
+  vars:
+    ntp_servers:
+      - 0.pool.ntp.org
+      - 1.pool.ntp.org
+      - 2.pool.ntp.org
+    ntp_service_name: "ntp"
+  tasks:
+    - name: Atualizar cache de pacotes APT
+      apt:
+        update_cache: yes
+
+    - name: Instalar o pacote NTP
+      apt:
+        name: "{{ ntp_service_name }}"
+        state: present
+
+    - name: Garantir que o arquivo de configuração existe
+      file:
+        path: /etc/ntp.conf
+        state: touch
+        mode: '0644'
+
+    - name: Configurar os servidores NTP
+      lineinfile:
+        path: /etc/ntp.conf
+        regexp: "^server "
+        line: "server {{ item }}"
+        insertafter: "^# Use servers from the NTP Pool Project"
+      loop: "{{ ntp_servers }}"
+      notify: Reiniciar serviço NTP
+
+    - name: Garantir que o serviço NTP está habilitado e em execução
+      service:
+        name: "{{ ntp_service_name }}"
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reiniciar serviço NTP
+      service:
+        name: "{{ ntp_service_name }}"
+        state: restarted

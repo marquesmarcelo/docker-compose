@@ -1,0 +1,56 @@
+---
+- name: Configurar syslog-ng para enviar logs para o servidor remoto
+  hosts: all
+  become: yes
+  vars:
+    log_server: "172.20.0.10"  # Endereço do servidor de logs
+    syslog_ng_service_name: "syslog-ng"
+  tasks:
+    - name: Atualizar cache de pacotes APT
+      apt:
+        update_cache: yes
+
+    - name: Instalar o syslog-ng
+      apt:
+        name: syslog-ng
+        state: present
+
+    - name: Garantir que o arquivo de configuração principal existe
+      file:
+        path: /etc/syslog-ng/syslog-ng.conf
+        state: touch
+        mode: '0644'
+
+    - name: Criar diretório para arquivos de configuração adicionais
+      file:
+        path: /etc/syslog-ng/conf.d/
+        state: directory
+        mode: '0755'
+
+    - name: Adicionar configuração para envio de logs remotos
+      copy:
+        dest: /etc/syslog-ng/conf.d/remote-logging.conf
+        content: |
+          # Configuração para envio de logs para o servidor remoto
+          destination d_remote {
+              udp("{{ log_server }}" port(514));
+          };
+
+          log {
+              source(s_src);
+              destination(d_remote);
+          };
+        mode: '0644'
+      notify: Reiniciar serviço syslog-ng
+
+    - name: Garantir que o serviço syslog-ng está habilitado e em execução
+      service:
+        name: "{{ syslog_ng_service_name }}"
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reiniciar serviço syslog-ng
+      service:
+        name: "{{ syslog_ng_service_name }}"
+        state: restarted

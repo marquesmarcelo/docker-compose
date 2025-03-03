@@ -22,15 +22,13 @@ Senha: rnpesr
 
 # Comandos para finalizar a configuração do ansible
 
-Antes de iniciar vamos coletar as chaves públicas das VMs e adicioná-las ao arquivo known_hosts da máquina control-node usando o commando ssh-keyscan
+Antes de iniciar vamos coletar as chaves públicas das VMs e adicioná-las ao arquivo known_hosts da máquina master usando o commando ssh-keyscan
 
 Execute o playbook:
 
 ```bash
 ansible-playbook -i hosts ./playbook/add_known_hosts.yml
 ```
-
-Isso adicionará automaticamente as chaves públicas de todas as VMs ao arquivo known_hosts.
 
 # Testando a configuração
 
@@ -42,8 +40,23 @@ Obs.: irá falhar a VM3 pois ela não foi criada
 ansible -i hosts all -m ping
 ```
 
-Instalar o nginx nas VMs do grupo Web
+Aplicar algumas configurações interessantes no container
 
 ```bash
-ansible-playbook -i hosts web_hosts_playbook.yml
+ansible-playbook -i hosts ./playbook/ntp.yml
+ansible-playbook -i hosts ./playbook/syslog-ng.yml
+ansible-playbook -i hosts ./playbook/zabbix-agent.yml
+ansible-playbook -i hosts ./playbook/change_root_password.yml
+```
+
+Instalar o nginx apenas nas VMs do grupo Web
+
+```bash
+ansible-playbook -i hosts ./playbook/web_hosts.yml
+```
+
+Rotacionar a chave privada em todos os nós
+
+```bash
+ansible-playbook -i hosts ./playbook/rotate_private_key.yml
 ```

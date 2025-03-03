@@ -1,18 +1,22 @@
 # Usar a imagem base do Ubuntu
 FROM ubuntu:22.04
 
+# Forçar o apt a funcionar em modo não interativo
+ENV DEBIAN_FRONTEND=noninteractive
+
 # Instalar dependências básicas
 RUN apt-get update && \
-    apt-get install -y openssh-server sudo net-tools telnet && \
-    apt-get install -y ssh sudo software-properties-common
+    apt-get install -y openssh-server ssh software-properties-common sudo net-tools telnet vim
 
 # Adicionar o repositório do Ansible
 RUN apt-add-repository --yes --update ppa:ansible/ansible
 
-# Instalar o Ansible
+# Instalar o Ansible e o pip
 RUN apt-get update && \
-    apt-get install -y ansible && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y ansible python3-pip
+
+# Instalar a passlib que permite cifrar senhas no ansible 
+RUN pip3 install passlib
 
 # Definir senha para o usuário root
 RUN echo 'root:rnpesr' | chpasswd
@@ -33,28 +37,12 @@ COPY ./.ssh/ /root/.ssh/
 RUN chmod 600 /root/.ssh/ && \
     chown root:root /root/.ssh/
 
-# Remover as chaves SSH padrão geradas durante a construção da imagem
-RUN rm -f /etc/ssh/ssh_host_*
-
-# Criar um script para regenerar as chaves SSH no início do contêiner
-RUN echo '#!/bin/bash\n\
-rm -f /etc/ssh/ssh_host_*\n\
-ssh-keygen -t rsa -b 4096 -f /etc/ssh/ssh_host_rsa_key -N ""\n\
-ssh-keygen -t ecdsa -b 521 -f /etc/ssh/ssh_host_ecdsa_key -N ""\n\
-ssh-keygen -t ed25519 -f /etc/ssh/ssh_host_ed25519_key -N ""\n\
-exec "$@"' > /usr/local/bin/startup.sh
-
-# Tornar o script executável
-RUN chmod +x /usr/local/bin/startup.sh
-
-# Configurar HashKnownHosts para eviar armazenar um hash no 
-RUN sed -i '/^#?HashKnownHosts/s/^.*$/HashKnownHosts no/' /etc/ssh/ssh_config || echo "HashKnownHosts no" >> /etc/ssh/ssh_config
-
 WORKDIR /ansible
 
 # Expor a porta SSH
 EXPOSE 22
 
-# Definir o comando de inicialização
-ENTRYPOINT ["/usr/local/bin/startup.sh"]
+# limpar o repositorio apt
+RUN  rm -rf /var/lib/apt/lists/*
+
 CMD ["/usr/sbin/sshd", "-D"]

@@ -1,0 +1,54 @@
+---
+- name: Configurar Zabbix Agent nos hosts gerenciados
+  hosts: all
+  become: yes
+  vars:
+    zabbix_server: "172.20.0.10"  # Endereço do servidor Zabbix
+    zabbix_agent_package: "zabbix-agent"
+    zabbix_agent_service: "zabbix-agent"
+    zabbix_agent_conf_file: "/etc/zabbix/zabbix_agentd.conf"
+  tasks:
+    - name: Atualizar cache de pacotes APT
+      apt:
+        update_cache: yes
+
+    - name: Instalar o pacote Zabbix Agent
+      apt:
+        name: "{{ zabbix_agent_package }}"
+        state: present
+
+    - name: Garantir que o arquivo de configuração existe
+      file:
+        path: "{{ zabbix_agent_conf_file }}"
+        state: touch
+        mode: '0644'
+
+    - name: Configurar o servidor Zabbix no agente
+      lineinfile:
+        path: "{{ zabbix_agent_conf_file }}"
+        regexp: "^Server="
+        line: "Server={{ zabbix_server }}"
+
+    - name: Configurar o servidor ativo do Zabbix no agente
+      lineinfile:
+        path: "{{ zabbix_agent_conf_file }}"
+        regexp: "^ServerActive="
+        line: "ServerActive={{ zabbix_server }}"
+
+    - name: Configurar o nome do host no Zabbix Agent
+      lineinfile:
+        path: "{{ zabbix_agent_conf_file }}"
+        regexp: "^Hostname="
+        line: "Hostname={{ inventory_hostname }}"
+
+    - name: Garantir que o serviço Zabbix Agent está habilitado e em execução
+      service:
+        name: "{{ zabbix_agent_service }}"
+        enabled: yes
+        state: started
+
+  handlers:
+    - name: Reiniciar serviço Zabbix Agent
+      service:
+        name: "{{ zabbix_agent_service }}"
+        state: restarted
