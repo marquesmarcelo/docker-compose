@@ -54,9 +54,3 @@ Instalar o nginx apenas nas VMs do grupo Web
 ```bash
 ansible-playbook -i hosts ./playbook/web_hosts.yml
 ```
-
-Rotacionar a chave privada em todos os nós
-
-```bash
-ansible-playbook -i hosts ./playbook/rotate_private_key.yml
-```
