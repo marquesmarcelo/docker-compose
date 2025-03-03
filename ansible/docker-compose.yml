@@ -1,35 +1,50 @@
-version: '3'
+version: '3.8'
 
 services:
   master:
-    build: .
+    build:
+      context: ./master
     container_name: master
     hostname: master
-    volumes:
-      - ./ansible:/etc/ansible
-      - ./ssh_config/master:/root/.ssh/id_rsa
-      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.10
     ports:
       - "2222:22"
-
-  node1:
-    build: .
-    container_name: node1
-    hostname: node1
+    tty: true
+    stdin_open: true
     volumes:
-      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+      - ./ansible_config:/ansible
+
+  vm1:
+    build:
+      context: ./slave
+    container_name: vm1
+    hostname: vm1
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.2
     ports:
       - "2223:22"
+    tty: true
+    stdin_open: true
 
-  node2:
-    build: .
-    container_name: node2
-    hostname: node2
-    volumes:
-      - ./ssh_config/master.pub:/root/.ssh/authorized_keys
+  vm2:
+    build:
+      context: ./slave
+    container_name: vm2
+    hostname: vm2
+    networks:
+      ansible-net:
+        ipv4_address: 172.20.0.3
     ports:
       - "2224:22"
+    tty: true
+    stdin_open: true
 
 networks:
-  default:
+  ansible-net:
     driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24

@@ -1,0 +1,31 @@
+---
+- name: Instalar e configurar Nginx no grupo web
+  hosts: web  # Especifica o grupo "web"
+  become: yes  # Executa tarefas com privilégios de superusuário
+  tasks:
+    - name: Atualizar o cache do apt
+      apt:
+        update_cache: yes
+
+    - name: Instalar o Nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Iniciar e habilitar o serviço Nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Verificar se o Nginx está rodando
+      uri:
+        url: "http://{{ ansible_host }}"
+        return_content: yes
+      register: nginx_status
+      ignore_errors: yes
+
+    - name: Exibir status do Nginx
+      debug:
+        msg: "Nginx está rodando em {{ ansible_host }}"
+      when: nginx_status.status == 200

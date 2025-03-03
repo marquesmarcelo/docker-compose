@@ -1,0 +1,38 @@
+---
+- name: Adicionar chaves SSH dos hosts ao known_hosts local
+  hosts: localhost
+  become: no
+  tasks:
+    - name: Garantir que o diretório ~/.ssh existe
+      file:
+        path: "{{ ansible_user_dir }}/.ssh"
+        state: directory
+        mode: '0700'
+
+    - name: Garantir que o arquivo known_hosts existe
+      file:
+        path: "{{ ansible_user_dir }}/.ssh/known_hosts"
+        state: touch
+        mode: '0600'
+
+    - name: Remover entradas antigas do known_hosts para evitar duplicatas
+      lineinfile:
+        path: "{{ ansible_user_dir }}/.ssh/known_hosts"
+        regexp: "^{{ item }} "
+        state: absent
+      loop: "{{ groups['all'] }}"
+
+    - name: Coletar chaves SSH das VMs
+      shell: |
+        ssh-keyscan -t rsa,ecdsa,ed25519 {{ item }} >> "{{ ansible_user_dir }}/.ssh/known_hosts"
+      args:
+        executable: /bin/bash
+      loop: "{{ groups['all'] }}"
+      register: ssh_keyscan_result
+
+    - name: Remover duplicatas do arquivo known_hosts
+      shell: |
+        sort -u "{{ ansible_user_dir }}/.ssh/known_hosts" > "{{ ansible_user_dir }}/.ssh/known_hosts.tmp" && \
+        mv "{{ ansible_user_dir }}/.ssh/known_hosts.tmp" "{{ ansible_user_dir }}/.ssh/known_hosts"
+      args:
+        executable: /bin/bash

@@ -1,0 +1,11 @@
+[servers]
+vm1 ansible_host=172.20.0.2
+vm2 ansible_host=172.20.0.3
+#vm3 ansible_host=172.20.0.4
+
+[web]
+vm1 ansible_host=172.20.0.2
+
+[all:vars]
+ansible_user=ansible
+ansible_ssh_private_key_file=/root/.ssh/id_rsa
