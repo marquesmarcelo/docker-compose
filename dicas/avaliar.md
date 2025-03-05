@@ -375,3 +375,448 @@ theharvester
 # 403 e 401 Bypass
 
 https://book.hacktricks.wiki/en/network-services-pentesting/pentesting-web/403-and-401-bypasses.html
+
+
+Para uso em pentests com Kali Linux, o chipset da placa Wi-Fi precisa suportar modo monitor e injeção de pacotes. Os chipsets mais recomendados e amplamente suportados pelo Kali Linux incluem:
+
+Chipsets Recomendados
+
+Chipset Suporte ao Modo Monitor Injeção de Pacotes Observações
+
+Atheros AR9271 Sim Sim Muito compatível, usado em Alfa AWUS036NHA
+
+Ralink RT3572 Sim Sim Suporte confiável, menos comum
+
+Ralink RT3070 Sim Sim Popular em adaptadores antigos
+
+Realtek RTL8812AU Sim (com driver) Sim Precisa instalar driver extra no Kali
+
+Realtek RTL8814AU Sim (com driver) Sim Requer driver específico, usado em Alfa AWUS1900
+
+Placas Wi-Fi Populares para Pentest
+
+Alfa AWUS036NHA (Atheros AR9271) → Melhor estabilidade e compatibilidade nativa
+
+Alfa AWUS036ACH (Realtek RTL8812AU) → Boa opção para dual-band (2.4GHz e 5GHz)
+
+Panda PAU09 (Ralink RT3572) → Alternativa confiável para Kali
+
+TP-Link TL-WN722N v1 (Atheros AR9271) → Somente a versão v1 funciona (v2 e v3 não suportam modo monitor)
+
+A minha versão é a TP-Link TL-WN722N é barata e acessivel
+
+Podem utilizar estes dois links como referência:
+
+https://www.enisa.europa.eu/sites/default/files/publications/Update%20of%20CERT%20Baseline%20Capabilities.pdf
+
+https://www.enisa.europa.eu/sites/default/files/publications/ENISA%20Report%20-%20How%20to%20setup%20CSIRT%20and%20SOC.pdf
+
+Logo de início falei de alguns materiais massa sobre o Nmap:
+
+- https://nmap.org/book/
+
+- https://phrack.org/issues/51/11#article
+
+- https://phrack.org/issues/54/9#article
+
+Aproveitando a deixa sobre a e-zine Phrack, comentei de outras e-zines legais para darem uma lida e ficarem antenados no que há de novo no mundo de segurança/hacking:
+
+- https://phrack.org/
+
+- https://tramoia.sh/
+
+- https://pagedout.institute/
+
+- https://tmpout.sh/
+
+Depois chegamos num ponto de falar sobre alguns materiais de estudos, principalmente voltados para redes e Linux:
+
+- https://novatec.com.br/livros/analise-trafego-tcp-ip/
+-
+- https://www.amazon.com/TCP-Illustrated-Protocols-Addison-Wesley-Professional/dp/0321336313
+
+- https://www.guiafoca.org/
+
+- https://novatec.com.br/livros/programacao-shell-linux-13ed/
+
+- https://overthewire.org/wargames/bandit/
+
+Também comentei uma alternativa ao Nmap, o Rustscan:
+
+- https://github.com/RustScan/RustScan
+
+E falei o quanto interessante é pegar o código das coisas pra ler, por exemplo o plugin de banner grab do Nmap:
+
+- https://github.com/nmap/nmap/blob/master/scripts/banner.nse
+
+Depois disso chegamos na parte de algumas ferramentas para enumeração web e deixei algumas além das que tem no material para vocês testarem:
+
+- https://github.com/ffuf/ffuf
+
+- https://github.com/xmendez/wfuzz
+
+- https://github.com/lanjelot/patator (Minha favorita <3)
+
+
+
+Ao falar de curso do Metasploit comentei desse aqui:
+
+- https://www.offsec.com/metasploit-unleashed/
+
+Já sobre livro de pentest desses dois:
+
+- https://novatec.com.br/livros/black-hat-python/
+
+- https://novatec.com.br/livros/testes-invasao-pentest/
+
+Quando falamos sobre exploits públicos comentei do searchsploit, ferramenta para buscar no terminal exploits do exploit-db:
+
+- https://www.exploit-db.com/searchsploit
+
+E para finalizar deixei um post no meu blog que mostra as etapas (boa parte delas já vimos) para invasão de alguma coisa. Nesse caso, utilizei como alvo um desafio mesmo:
+
+- https://gildasio.gitlab.io/posts/mr-robot/
+
+Ferramentas e coleções:
+
+#OSINT COLLETION
+
+https://caipora.pro
+
+https://start.me/p/DPYPMz/the-ultimate-osint-collection
+
+https://start.me/p/L1rEYQ/osint4all
+
+https://docs.google.com/spreadsheets/d/18rtqh8EG2q1xBo2cLNyhIDuK9jrPGwYr9DI2UncoqJQ/edit?gid=930747607#gid=930747607
+
+
+# Banco de dados públicos
+
+shodan.io
+
+https://hunter.how
+
+https://fofa.info
+
+https://pulsedive.com/
+
+#Extensão
+
+
+#Email
+
+https://chromewebstore.google.com/detail/email-extractor/jdianbbpnakhcmfkcckaboohfgnngfcc?pli=1
+
+hunter.io
+
+Malware Analysis - Sandboxing (https://github.com/0xc1r3ng/Malware-Sandboxes-Malware-Source)
+
+URL	INFO
+
+Cuckoo Sandbox	Open source, self hosted sandbox and automated analysis system.
+
+Mastiff	Static analysis of malware.
+
+Fastir	This tool collects different artefacts on live Windows and records the results in csv files.
+
+SysAnalyser	Application that was designed to give malcode analysts an automated tool
+
+Viper	Binary analysis and management framework
+
+Zeltser analysis	Automated Malware Analysis
+
+Manalyze	Manalyze started when antivirus tried to quarantine malware sample collection for the thirtieth time
+
+Quarkslab IRMA	Asynchronous and customizable analysis platform for suspicious files!
+
+Dorothy2	A malware/botnet analysis framework written in Ruby.
+
+F-Secure see	Sandboxed Execution Environment
+
+Noriben	hPython-based script that works in conjunction with Sysinternals Procmon
+
+Malheur	Automatic Analysis of Malware Behavior
+
+Drakvuf	Virtualization based agentless black-box binary analysis system.
+
+Zero Wine Tryouts	Zero Wine Tryouts is an open source malware analysis tool.
+
+CWSandbox	A “sandbox”, as it relates to computer security, is a designated, separate and restricted environment
+
+Malwasm	Offline debugger for malware's reverse engineering
+
+( Online ) Malware Analysis - Sandbox
+
+URL	INFO
+
+Malwr	Free analysis with an online Cuckoo Sandbox instance.
+
+Hybrid analysis	Online malware analysis tool, powered by VxSandbox.
+
+Virscan	FREE on-line scan service, which checks uploaded files for malware, using antivirus engines, indicated in the VirSCAN list.
+
+Virusade	Hosted virus scanning for developers
+
+VirusTotal	Free online analysis of malware samples and URLs
+
+Malwareconfig	Online malware analysis samples
+
+Detux GNU/Linux sandbox	sandbox developed to do traffic analysis of the Linux malwares and capture the IOCs by doing so. QEMU hypervisor is used to emulate Linux (Debian) for various CPU architectures.
+
+AndroTotal	Free online analysis of APKs against multiple mobile antivirus apps.
+
+Comodo	malware detection techniques Valkyrie conducts several analysis using run-time behavior and hundreds
+
+Manalyzer	Free service which performs static analysis on PE executables to detect undesirable behavior.
+
+ID Ransomware	Upload a ransom note and/or sample encrypted file to identify the ransomware that has encrypted your data.
+
+Document Analyzer	Free dynamic analysis of DOC and PDF files.
+
+Cryptam	Analyze suspicious office documents.
+
+Metascan	Scan a file, hash or IP address for malware (free)
+
+Jotti	Free online multi-AV scanner.
+
+PDF Examiner	Suspected malware to be fed into our analysis network.
+
+PDF examiner	Analyse suspicious PDF files.
+
+Malware tracker	Provides malware analysis, forensics, and security solutions for enterprise.
+
+Malware Sources
+
+URL	INFO
+
+http://cybercrime-tracker.net/	Cybercrime tracker
+
+http://malc0de.com/database/	Malc0de
+
+http://malwaredb.malekal.com/	Malekal
+
+http://malshare.com	Malshare
+
+http://tracker.h3x.eu/	Tracker
+
+http://www.kernelmode.info	Kernel mode
+
+https://www.botnets.fr/wiki/Main_Page	Botnet.fr
+
+http://www.exposedbotnets.com/	Exposed Botnets
+
+http://malware.dontneedcoffee.com/	Dont need coffee
+
+http://vxvault.net/	VX Vault
+
+https://github.com/ytisf/theZoo/tree/master/malwares/Binaries	Malware binaries
+
+https://totalhash.cymru.com/	Total hash
+
+https://zeustracker.abuse.ch	ZeuS Tracker
+
+https://cse.google.com/cse/home?cx=011750002002865445766%3Apc60zx1rliu (from Corey Harrell)	Custom Google search engine
+
+https://archive.org/details/malwaremuseum	Malware museum
+
+https://ransomwaretracker.abuse.ch/tracker/	Ransomware tracker
+
+https://docs.google.com/spreadsheets/d/1TWS238xacAto-fLKh1n5uTsdijWdCEsGIM0Y0Hvmc5g/pubhtml#	Ransomware overview
+
+https://shinolocker.com/	Ransomware simulator
+
+http://contagiodump.blogspot.se/	Contagio
+
+http://virusshare.com/	VirusShare
+
+http://www.virusign.com/	Virusign
+
+http://www.malwaredomainlist.com	Malware domain list
+
+https://malware.lu/	Malware.lu
+
+https://github.com/MISP/MISP	MISP
+
+http://www.malware.pl/ - https://www.scumware.org/	SafeGroup
+
+http://minotauranalysis.com	NovCon Minotaur
+
+http://support.clean-mx.de/clean-mx/viruses.php	Clean MX
+
+http://panda.gtisc.gatech.edu/malrec/	Edu malrec
+
+https://www.abuse.ch/	Abuse CH
+
+http://www.offensivecomputing.net/	Offensive computing
+
+http://www.malwaredomains.com	Malware domain blocklist
+
+https://github.com/technoskald/maltrieve	Maltrieve
+
+https://stixproject.github.io/	Structured Threat Information eXpression
+
+https://ytisf.github.io/theZoo/	The Zoo aka Malware DB
+
+https://github.com/0day1day/mwcrawler	Tool Mwcrawler
+
+Domain Analysis
+
+Inspect domains and IP addresses.
+
+AbuseIPDB - AbuseIPDB is a project dedicated to helping combat the spread of hackers, spammers, and abusive activity on the internet.
+
+badips.com - Community based IP blacklist service.
+
+boomerang - A tool designed for consistent and safe capture of off network web resources.
+
+Cymon - Threat intelligence tracker, with IP/domain/hash search.
+
+Desenmascara.me - One click tool to retrieve as much metadata as possible for a website and to assess its good standing.
+
+Dig - Free online dig and other network tools.
+
+dnstwist - Domain name permutation engine for detecting typo squatting, phishing and corporate espionage.
+
+IPinfo - Gather information about an IP or domain by searching online resources.
+
+Machinae - OSINT tool for gathering information about URLs, IPs, or hashes. Similar to Automator.
+
+mailchecker - Cross-language temporary email detection library.
+
+MaltegoVT - Maltego transform for the VirusTotal API. Allows domain/IP research, and searching for file hashes and scan reports.
+
+Multi rbl - Multiple DNS blacklist and forward confirmed reverse DNS lookup over more than 300 RBLs.
+
+NormShield Services - Free API Services for detecting possible phishing domains, blacklisted ip addresses and breached accounts.
+
+
+PhishStats - Phishing Statistics with search for IP, domain and website title
+Spyse - subdomains, whois, realted domains, DNS, hosts AS, SSL/TLS info,
+
+SecurityTrails - Historical and current WHOIS, historical and current DNS records, similar domains, certificate information and other domain and IP related API and tools.
+
+SpamCop - IP based spam block list.
+
+SpamHaus - Block list based on domains and IPs.
+
+Sucuri SiteCheck - Free Website Malware and Security Scanner.
+
+Talos Intelligence - Search for IP, domain or network owner. (Previously SenderBase.)
+
+TekDefense Automater - OSINT tool for gathering information about URLs, IPs, or hashes.
+
+URLhaus - A project from abuse.ch with the goal of sharing malicious URLs that are being used for malware distribution.
+
+URLQuery - Free URL Scanner.
+
+urlscan.io - Free URL Scanner & domain information.
+
+Whois - DomainTools free online whois search.
+
+Zeltser's List - Free online tools for researching malicious websites, compiled by Lenny Zeltser.
+
+ZScalar Zulu - Zulu URL Risk Analyzer.
+
+Documents and Shellcode
+
+Analyze malicious JS and shellcode from PDFs and Office documents. See also the browser malware section.
+
+AnalyzePDF - A tool for analyzing PDFs and attempting to determine whether they are malicious.
+
+box-js - A tool for studying JavaScript malware, featuring JScript/WScript support and ActiveX emulation.
+
+diStorm - Disassembler for analyzing malicious shellcode.
+
+InQuest Deep File Inspection - Upload common malware lures for Deep File Inspection and heuristical analysis.
+
+JS Beautifier - JavaScript unpacking and deobfuscation.
+
+libemu - Library and tools for x86 shellcode emulation.
+
+malpdfobj - Deconstruct malicious PDFs into a JSON representation.
+
+OfficeMalScanner - Scan for malicious traces in MS Office documents.
+
+olevba - A script for parsing OLE and OpenXML documents and extracting useful information.
+
+Origami PDF - A tool for analyzing malicious PDFs, and more.
+
+PDF Tools - pdfid, pdf-parser, and more from Didier Stevens.
+
+PDF X-Ray Lite - A PDF analysis tool, the backend-free version of PDF X-RAY.
+
+peepdf - Python tool for exploring possibly malicious PDFs.
+
+QuickSand - QuickSand is a compact C framework to analyze suspected malware documents to identify exploits in streams of different encodings and to locate and extract embedded 
+executables.
+
+Spidermonkey - Mozilla's JavaScript engine, for debugging malicious JS.
+
+Malware Corpora
+
+Malware samples collected for analysis.
+
+Clean MX - Realtime database of malware and malicious domains.
+
+Contagio - A collection of recent malware samples and analyses.
+
+Exploit Database - Exploit and shellcode samples.
+
+Infosec - CERT-PA - Malware samples collection and analysis.
+
+InQuest Labs - Evergrowing searchable corpus of malicious Microsoft documents.
+
+Javascript Mallware Collection - Collection of almost 40.000 javascript malware samples
+
+Malpedia - A resource providing rapid identification and actionable context for malware investigations.
+
+Malshare - Large repository of malware actively scrapped from malicious sites.
+
+Ragpicker - Plugin based malware crawler with pre-analysis and reporting functionalities
+
+theZoo - Live malware samples for analysts.
+
+Tracker h3x - Agregator for malware corpus tracker and malicious download sites.
+
+vduddu malware repo - Collection of various malware files and source code.
+
+VirusBay - Community-Based malware repository and social network.
+
+ViruSign - Malware database that detected by many anti malware programs except ClamAV.
+
+VirusShare - Malware repository, registration required.
+
+VX Vault - Active collection of malware samples.
+
+Zeltser's Sources - A list of malware sample sources put together by Lenny Zeltser.
+
+Zeus Source Code - Source for the Zeus trojan leaked in 2011.
+
+VX Underground - Massive and growing collection of free malware samples.
+
+
+Honeypots
+
+Trap and collect your own samples.
+
+Conpot - ICS/SCADA honeypot.
+
+Cowrie - SSH honeypot, based on Kippo.
+
+DemoHunter - Low interaction Distributed Honeypots.
+
+Dionaea - Honeypot designed to trap malware.
+
+Glastopf - Web application honeypot.
+
+Honeyd - Create a virtual honeynet.
+
+HoneyDrive - Honeypot bundle Linux distro.
+
+Honeytrap - Opensource system for running, monitoring and managing honeypots.
+
+MHN - MHN is a centralized server for management and data collection of honeypots. MHN allows you to deploy sensors quickly and to collect data immediately, viewable from a neat web interface.
+
+Mnemosyne - A normalizer for honeypot data; supports Dionaea.
+
+Thug - Low interaction honeyclient, for investigating malicious websites.
