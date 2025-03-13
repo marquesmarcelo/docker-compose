@@ -820,3 +820,46 @@ MHN - MHN is a centralized server for management and data collection of honeypot
 Mnemosyne - A normalizer for honeypot data; supports Dionaea.
 
 Thug - Low interaction honeyclient, for investigating malicious websites.
+
+Pra quem ainda está levando surra do git, segue uma sugestão de joguinho para reforçar o aprendizado: https://learngitbranching.js.org/
+
+Desafio legal pra praticar sobre XSS:
+- https://xss-game.appspot.com/
+
+E para responder a dúvida de um colega recorri a uma imagem que montei numa apresentação:
+- https://gildasio.gitlab.io/talk/h2t-semcomp/#8
+
+Essa apresentação está disponível em meu site... Como é de conteúdo pertinente para o curso, acho legal assistirem. O título é "Web App Hardening: HTTP Headers":
+- https://gildasio.gitlab.io/teaching/
+
+Noutro momento falamos ainda sobre WAF e algumas possibilidades de bypass:
+- https://websitesecuritystore.com/wp-content/uploads/2021/10/what-is-web-application-firewall.svg
+- https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#generic-waf-bypass
+- https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/XSS%20Injection/3%20-%20XSS%20Common%20WAF%20Bypass.md
+
+Sobre materiais de estudo a respeito de SQL injection comentei desses livros:
+- https://www.amazon.com/Injection-Attacks-Defense-Justin-Clarke/dp/1597499633
+- https://www.amazon.com/Web-Application-Hackers-Handbook-Exploiting/dp/1118026470
+
+Depois fiz um jabázin sobre uma ferramenta que montei para auxiliar na exploração de falhas de injeção de comandos:
+- https://github.com/gildasio/wshlient
+- https://asciinema.org/a/q1eUYpO1GNYbEV2wta9CiIjGh
+
+Nela, inclusive, tem uns exemplos de payloads de códigos disfarçados em imagens... fica aí a recomendação:
+- https://github.com/gildasio/wshlient/blob/main/auxiliary_files/webshells/simple_jpg.php
+- https://github.com/gildasio/wshlient/blob/main/auxiliary_files/webshells/image.php
+
+Aqui tomem os links q comentei na aula de hoje sobre XSS e mais sobre segurança web client side sorriso
+
+Livro sobre XSS: https://www.amazon.com/XSS-Attacks-Scripting-Exploits-Defense/dp/1597491543
+
+Um cara muito bom sobre XSS que posta costumeiramente no Twitter e Youtube:
+- https://x.com/brutelogic
+- https://x.com/RodoAssis
+- https://www.youtube.com/user/brutelogic
+
+Palestra "Muito além do alert() em ataques web client side":
+- https://www.slideshare.net/slideshow/muito-alm-do-alert-em-ataques-web-client-side/69599104
+
+Ferramenta h2t para recomendações de melhorias de segurança web somente baseada em configurações de cabeçalhos HTTP:
+- https://github.com/gildasio/h2t
