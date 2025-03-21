@@ -794,7 +794,6 @@ Zeus Source Code - Source for the Zeus trojan leaked in 2011.
 
 VX Underground - Massive and growing collection of free malware samples.
 
-
 Honeypots
 
 Trap and collect your own samples.
@@ -824,29 +823,41 @@ Thug - Low interaction honeyclient, for investigating malicious websites.
 Pra quem ainda está levando surra do git, segue uma sugestão de joguinho para reforçar o aprendizado: https://learngitbranching.js.org/
 
 Desafio legal pra praticar sobre XSS:
+
 - https://xss-game.appspot.com/
 
 E para responder a dúvida de um colega recorri a uma imagem que montei numa apresentação:
+
 - https://gildasio.gitlab.io/talk/h2t-semcomp/#8
 
 Essa apresentação está disponível em meu site... Como é de conteúdo pertinente para o curso, acho legal assistirem. O título é "Web App Hardening: HTTP Headers":
+
 - https://gildasio.gitlab.io/teaching/
 
 Noutro momento falamos ainda sobre WAF e algumas possibilidades de bypass:
+
 - https://websitesecuritystore.com/wp-content/uploads/2021/10/what-is-web-application-firewall.svg
+
 - https://github.com/swisskyrepo/PayloadsAllTheThings/tree/master/SQL%20Injection#generic-waf-bypass
+
 - https://github.com/swisskyrepo/PayloadsAllTheThings/blob/master/XSS%20Injection/3%20-%20XSS%20Common%20WAF%20Bypass.md
 
 Sobre materiais de estudo a respeito de SQL injection comentei desses livros:
+
 - https://www.amazon.com/Injection-Attacks-Defense-Justin-Clarke/dp/1597499633
+
 - https://www.amazon.com/Web-Application-Hackers-Handbook-Exploiting/dp/1118026470
 
 Depois fiz um jabázin sobre uma ferramenta que montei para auxiliar na exploração de falhas de injeção de comandos:
+
 - https://github.com/gildasio/wshlient
+
 - https://asciinema.org/a/q1eUYpO1GNYbEV2wta9CiIjGh
 
 Nela, inclusive, tem uns exemplos de payloads de códigos disfarçados em imagens... fica aí a recomendação:
+
 - https://github.com/gildasio/wshlient/blob/main/auxiliary_files/webshells/simple_jpg.php
+
 - https://github.com/gildasio/wshlient/blob/main/auxiliary_files/webshells/image.php
 
 Aqui tomem os links q comentei na aula de hoje sobre XSS e mais sobre segurança web client side sorriso
@@ -854,12 +865,131 @@ Aqui tomem os links q comentei na aula de hoje sobre XSS e mais sobre segurança
 Livro sobre XSS: https://www.amazon.com/XSS-Attacks-Scripting-Exploits-Defense/dp/1597491543
 
 Um cara muito bom sobre XSS que posta costumeiramente no Twitter e Youtube:
+
 - https://x.com/brutelogic
+
 - https://x.com/RodoAssis
+
 - https://www.youtube.com/user/brutelogic
 
 Palestra "Muito além do alert() em ataques web client side":
+
 - https://www.slideshare.net/slideshow/muito-alm-do-alert-em-ataques-web-client-side/69599104
 
 Ferramenta h2t para recomendações de melhorias de segurança web somente baseada em configurações de cabeçalhos HTTP:
+
 - https://github.com/gildasio/h2t
+
+# Treinamento Privesc
+
+https://tryhackme.com/room/linuxprivesc
+
+https://tryhackme.com/room/linuxprivescarena
+
+https://tryhackme.com/room/sudovulnsbypass
+
+https://tryhackme.com/room/sudovulnsbof
+
+https://tryhackme.com/room/sudovulnssamedit
+
+https://tryhackme.com/room/dirtypipe
+
+https://tryhackme.com/room/pwnkit
+
+
+# Fundamentos linux
+
+https://tryhackme.com/module/linux-fundamentals
+
+
+# Comandos básicos de enumeração:
+
+
+#Máquina: hostname uname -r uname -a #Usuário: whoami id cat /etc/passwd #Rede: ip a ip r arp -v cat /etc/resolv.conf #Kernel Information uname -a #Operating System cat /etc/issue cat /etc/*-release #User info whoami w id grep $USER /etc/passwd - Lastlog lastlog | grep -v '**Never logged in**' -list all root cat /etc/passwd |cut -f1,3,4 -d":" | grep "0:0" |cut -f1 -d":" |awk '{print $1}' #Processes ps auxwww ps -u root ps -u $USER #File and folder cat /etc/shadow - sticky bit find / -perm -1000 -type d 2>/dev/null find / -perm -4000 2> /dev/null - SUID find / -perm -u=s -type f 2>/dev/null - SSGID find / -perm -g=s -type f 2>/dev/null #grep for keywords grep 'pass*' /etc/*.conf 2> /dev/null grep 'key' /etc/*.conf 2> /dev/null grep 'secret' /etc/*.conf 2> /dev/null #permission on root ls -als root/ #other users history find /* -name *.*history* -print 2> /dev/null #Capabilities getcap -r / 2>/dev/null #Metasploit modules post/linux/gather/enum_configs post/linux/gather/enum_system post/linux/gather/enum_network post/linux/gather/enum_psk post/linux/gather/hashdump post/linux/gather/openvpn_credentials post/linux/gather/phpmyadmin_credsteal #Automatic tools https://github.com/reider-roque/linpostexp/blob/master/linprivchecker.py http://pentestmonkey.net/tools/audit/unix-privesc-check
+
+
+History search
+
+*cat ~/.history | less
+
+find /* -name *.history -print 2> /dev/null
+
+
+# Find
+
+https://nmmorette.notion.site/Find-4e6c1ec752b94b8ebe8a0ab00e0046f2
+
+find
+
+
+Seguem alguns links com materiais para treino na área de forense.
+
+https://www.ashemery.com/dfir.html
+
+https://cfreds-archive.nist.gov/
+
+https://www.dfir.training/downloads/test-images?limit=20&limitstart=20
+
+Bom, aqui uns links que comentamos na aula de hoje hehe
+
+Primeiro, uns programas que podem ser utilizados para mexer com API:
+
+- https://www.usebruno.com/
+
+- https://www.postman.com/
+
+- https://insomnia.rest/
+
+- https://gildasio.gitlab.io/talk/kernel-skills-userspace-debugging/#/1/1
+
+E por fim, falamos de alguns materiais pra ficar fera em Linux:
+
+- https://novatec.com.br/livros/programacao-shell-linux-13ed/
+
+- https://www.guiafoca.org/
+
+- https://www.amazon.com/Linux-Bible-Christopher-Negus/dp/1119578884
+
+- https://www.linuxfromscratch.org/
+
+Dei um breve resumo lá na aula do que se trata, e aqui o link:
+
+- https://gildasio.gitlab.io/posts/hacking-myself-again/
+
+Quando falei sobre núvem disse dos benefícios para pentests e comentei daquele projeto Segfault que o pessoal do THC mantém e disponibiliza pra gente uma máquina para podermos fazer diversos testes. Aqui o link do projeto:
+
+- https://www.thc.org/segfault/
+
+Daí fomos falar de IoT e pra levantar a onda dos perigos dessas tecnologias falei sobre o caso da Botnet Mirai:
+
+- https://en.wikipedia.org/wiki/Mirai_(malware)
+
+- https://book.hacktricks.wiki/en/index.html
+
+- https://github.com/swisskyrepo/PayloadsAllTheThings
+
+- https://ippsec.rocks/
+
+- https://www.amazon.com/Web-Application-Hackers-Handbook-Exploiting/dp/1118026470
+
+- https://portswigger.net/web-security
+
+Ainda falando sobre aprender conversamos sobre participar de comunidade, como isso é muito importante e auxilia bastante no nosso aprendizado. Aqui algumas comunidades muito legais que costumo participar:
+
+- https://www.becodoexploit.com/6hack.html
+
+- https://axesec.cc/pages/estudos/
+
+- https://boitatech.com/
+
+Daí sobre API falei do material da OWASP que é legal também:
+
+- https://github.com/OWASP/wstg/tree/master/document/4-Web_Application_Security_Testing/12-API_Testing
+
+E por fim alguns equipamentos voltados para testes de redes:
+
+- https://shop.hak5.org/products/wifi-pineapple
+
+- https://shop.hak5.org/products/lan-turtle
+
+- https://flipperzero.one/
