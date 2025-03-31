@@ -38,6 +38,7 @@ snmpset -v3 -u testainers -l authPriv \
 # Códigos MIBs no Linux
 
 Lista de alguns códigos MIBs interessantes para sistema Linux
+
 ```bash
 # Carga da CPU (1, 5, 15 minutos)
 .1.3.6.1.4.1.2021.10.1.3
@@ -84,3 +85,4 @@ IF-MIB::ifTable
 
 ## Depois consulte usando o índice (substitua X pelo índice desejado):
 .1.3.6.1.2.1.2.2.1.10.X
+```
