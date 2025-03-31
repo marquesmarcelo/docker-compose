@@ -98,6 +98,13 @@ services:
       - wazuh.indexer:wazuh.indexer
       - wazuh.manager:wazuh.manager
 
+  wazuh.agent:
+    image: opennix/wazuh-agent
+    hostname: wazuh.agent
+    restart: always
+    depends_on:
+      - wazuh.indexer
+      
 volumes:
   wazuh_api_configuration:
   wazuh_etc:
