@@ -60,6 +60,19 @@ services:
       ZBX_SERVER_HOST: zabbix-server
       ZBX_SERVER_PORT: '10051'
       ZBX_SERVER_ACTIVE: zabbix-server
+  snmp-agent:
+    image: testainers/snmpd-container:latest
+    container_name: snmp-agent
+    restart: unless-stopped
+    depends_on:
+      - zabbix-server
+    ports:
+      - 5161:161/udp
+    environment:
+      SNMP_V3_USER_TYPE: 'rwuser'
+      SNMP_V3_USER: 'testainers'
+      SNMP_V3_AUTH_PWD: 'authpass'
+      SNMP_V3_PRIV_PWD: 'privpass'
 
 volumes:
   postgresql-data:
