@@ -86,3 +86,32 @@ IF-MIB::ifTable
 ## Depois consulte usando o índice (substitua X pelo índice desejado):
 .1.3.6.1.2.1.2.2.1.10.X
 ```
+
+# Instalação do Zabbix agent
+
+1. Para instalar o Zabbix Agent execute:
+
+```bash
+apt update
+apt install vim wget stress
+wget https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+wget https://repo.zabbix.com/zabbix/7.2/release/ubuntu/pool/main/z/zabbix-release/zabbix-release_latest_7.2+ubuntu24.04_all.deb
+dpkg -i zabbix-release_latest_7.2+ubuntu24.04_all.deb
+apt update
+apt install zabbix-agent
+```
+
+2. No arquivo de configuração `/etc/zabbix/zabbix-agentd.conf` altere os valores para:
+
+```bash
+Server=zabbix-server
+ServerActive=zabbix-server
+Hostname=ubuntu
+```
+
+3. Iniciar o zabbix agent:
+```bash
+/etc/init.d/zabbix-agent restart
+/etc/init.d/zabbix-agent status
+* zabbix_agentd is running
+```

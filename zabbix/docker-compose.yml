@@ -74,6 +74,14 @@ services:
       SNMP_V3_AUTH_PWD: 'authpass'
       SNMP_V3_PRIV_PWD: 'privpass'
 
+  ubuntu:
+    image: ubuntu:latest
+    container_name: ubuntu
+    restart: unless-stopped
+    entrypoint: ["tail", "-f", "/dev/null"]
+    depends_on:
+      - zabbix-server
+    
 volumes:
   postgresql-data:
   zabbix-server-data:
