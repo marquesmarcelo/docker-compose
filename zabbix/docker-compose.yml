@@ -56,9 +56,9 @@ services:
     depends_on:
       - zabbix-server
     environment:
-      ZBX_HOSTNAME: "zabbix-server"
+      ZBX_HOSTNAME: "zabbix-agent"
       ZBX_SERVER_HOST: zabbix-server
-      ZBX_SERVER_PORT: '10051'
+      ZBX_SERVER_PORT: '10050'
       ZBX_SERVER_ACTIVE: zabbix-server
   snmp-agent:
     image: testainers/snmpd-container:latest
