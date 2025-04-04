@@ -5,3 +5,5 @@ hosts:
       username: wazuh-wui
       password: "MyS3cr37P450r.*-"
       run_as: false
+
+enrollment.dns: "wazuh.indexer"
