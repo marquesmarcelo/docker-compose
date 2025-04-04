@@ -6,4 +6,4 @@ hosts:
       password: "MyS3cr37P450r.*-"
       run_as: false
 
-enrollment.dns: "wazuh.indexer"
+enrollment.dns: "wazuh.manager"
