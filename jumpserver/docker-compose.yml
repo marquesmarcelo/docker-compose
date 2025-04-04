@@ -1,0 +1,26 @@
+services:
+  jumpserver:
+    image: jumpserver/jms_all:latest
+    container_name: jumpserver
+    restart: unless-stopped   
+    environment:
+      SECRET_KEY: PleaseChangeMe
+      BOOTSTRAP_TOKEN: PleaseChangeMe
+    ports:
+      - 2222:2222
+      - 80:80
+    volumes:
+      - jsdata:/opt/data
+      - pgdata:/var/lib/postgresql
+
+  ubuntu:
+    image: ubuntu:latest
+    container_name: ubuntu
+    restart: unless-stopped
+    entrypoint: ["tail", "-f", "/dev/null"]
+    depends_on:
+      - jumpserver
+
+volumes:
+  jsdata:
+  pgdata:
