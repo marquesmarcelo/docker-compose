@@ -993,3 +993,53 @@ E por fim alguns equipamentos voltados para testes de redes:
 - https://shop.hak5.org/products/lan-turtle
 
 - https://flipperzero.one/
+
+Módulo sobre processo de aprendizagem:
+
+https://academy.hackthebox.com/course/preview/learning-process
+
+Evento que rola aqui em Salvador e que ano passado teve apresentação sobre ataque em MacOS:
+
+https://web.archive.org/web/20250122084122/https://nullbyte-con.org/archive/2024/agenda.html
+
+Exemplo de várias técnicas úteis para bypass de softwares de defesas (tipo AntiVírus, EDR, etc)
+
+https://book.hacktricks.wiki/en/windows-hardening/av-bypass.html
+
+O ebook MUITO bom com muitos materiais massa sobre pentest:
+
+https://book.hacktricks.wiki/en/index.html
+
+O exemplo de modelo de relatório abordado aqui no curso:
+
+https://github.com/gildasio/report-template/blob/main/relatorio.pdf
+
+Por fim, aqui está meu site:
+
+https://gildasio.gitlab.io/
+
+Seguem alguns links com materiais para treino na área de forense.
+
+https://www.ashemery.com/dfir.html
+
+https://cfreds-archive.nist.gov/
+
+https://www.dfir.training/downloads/test-images?limit=20&limitstart=20
+
+Aqui um agregado de artefatos forense para Windows.
+
+https://psmths.gitbook.io/windows-forensics
+
+https://www.magnetforensics.com/blog/computer-artifacts-exploring-metadata-log-files-registry-data-and-more/
+
+E aqui algumas ferramentas criadas pelo Eric Zimmerman
+
+https://ericzimmerman.github.io/#!index.md
+
+Uma das últimas contribuições em termos de materiais extras:
+
+https://lolbas-project.github.io/
+
+Aqui há um wiki:
+
+https://www.cgsecurity.org/wiki/PhotoRec_passo-a-passo
