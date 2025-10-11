@@ -27,7 +27,7 @@ Abaixo a lista de usuários e senhas desta simulação:
 
 | Aplicação | Usuário | Senha |
 | :--- | :--- | :--- |
-| **noVNC** | - | changeme |
+| **noVNC** | - | rnpesr |
 | **root** | - | rnpesr |
 | **aluno** | - | rnpesr |
 | **Cortex** | admin | labuser |
