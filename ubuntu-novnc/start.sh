@@ -9,6 +9,7 @@ sleep 2
 
 echo "==> Iniciando XFCE..."
 startxfce4 &
+sleep 5
 
 echo "==> Configurando senha do VNC..."
 mkdir -p /home/aluno/.vnc

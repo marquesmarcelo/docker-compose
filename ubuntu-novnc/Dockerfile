@@ -98,6 +98,20 @@ RUN apt-get install -y --no-install-recommends gnupg2 gnupg-agent
 RUN sed -i 's|<span>no</span><br>VNC|<span>ESR/</span><br>RNP|g' /usr/share/novnc/vnc.html && \
     sed -i 's|<span>no</span>VNC|<span>ESR/</span>RNP|g' /usr/share/novnc/vnc.html
 
+# Criar um executavel para bloquear o logout.. Ainda não funciona!!
+RUN apt install -y --no-install-recommends zenity supervisor
+COPY ./no_logout.sh /usr/local/bin/no_logout.sh
+RUN chmod +x /usr/local/bin/no_logout.sh
+
+# Configurar o supervidord para monitorar os serviços e reinicia-los se necessário
+COPY setup_vnc.sh /usr/local/bin/setup_vnc.sh
+RUN chmod +x /usr/local/bin/setup_vnc.sh
+RUN mkdir -p /var/log && chmod 777 /var/log
+COPY supervisord.conf /etc/supervisor/conf.d/supervisord.conf
+
+# Wallpaper
+COPY ./wallpaper-esr.jpg /usr/share/backgrounds/xfce/
+COPY ./xfce4-desktop.xml /etc/xdg/xfce4/xfconf/xfce-perchannel-xml
 
 # Limpar o apt
 RUN apt clean all
@@ -115,9 +129,10 @@ RUN mkdir -p /tmp/.X11-unix
 RUN touch /home/aluno/.Xauthority
 
 
-
 EXPOSE ${NOVNC_PORT}
 EXPOSE ${VNC_PORT}
 
 
-ENTRYPOINT ["/usr/local/bin/start.sh"]
+#ENTRYPOINT ["/usr/local/bin/start.sh"]
+# Supervisord é o processo principal do container
+ENTRYPOINT ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
