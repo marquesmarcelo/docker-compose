@@ -2,7 +2,7 @@ version: "3.7"
 services:
 
   ubuntu-novnc:
-    image: ubuntu-novnc:1.0.1
+    image: ubuntu-novnc:1.0.0
     ports:
       - 8080:8080
     environment:
