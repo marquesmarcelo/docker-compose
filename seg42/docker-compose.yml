@@ -2,7 +2,8 @@ version: "3.7"
 services:
 
   novnc:
-    image: ubuntu-novnc:1.0.0
+    #image: ubuntu-novnc:1.0.0
+    image: marquesmarcelo/ubuntu-novnc:latest
     ports:
       - 8080:8080
       - 5900:5900
@@ -16,7 +17,8 @@ services:
       - SOC_NET
 
   kali-xrdp:
-    image: kali-xrdp:1.0.0
+    #image: kali-xrdp:1.0.0
+    image: marquesmarcelo/kali-xrdp:latest
     ports:
       - "2022:22"
       - "8389:3389"

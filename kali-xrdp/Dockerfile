@@ -62,12 +62,12 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
     sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
 
 RUN apt install -y --no-install-recommends \
-   kali-themes-purple
-#  kali-tools-detect \
-#  kali-tools-identify \
-#  kali-tools-protect \
-#  kali-tools-respond \
-#  kali-tools-recover \
+   kali-themes-purple \
+   kali-tools-detect \
+   kali-tools-identify \
+   kali-tools-protect \
+   kali-tools-respond \
+   kali-tools-recover
 
 #RUN sed -i 's|^Exec=.*|Exec=/usr/bin/pulseaudio|' /etc/xdg/autostart/pulseaudio-xrdp.desktop
 

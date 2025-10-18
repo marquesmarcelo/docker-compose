@@ -19,7 +19,7 @@ spec:
         # kubernetes.io/hostname: ids-rj
       containers:
       - name: pod-novnc
-        image: marquesmarcelo/esr-novnc:22.04
+        image: marquesmarcelo/ubuntu-novnc:latest
         env:
           - name: DISPLAY
             value: :1

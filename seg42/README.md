@@ -12,7 +12,17 @@ $ cd ../ubuntu-novnc
 $ docker build -t ubuntu-novnc:1.0.0 .
 ```
 
-2. Agora entre na pasta do curso e execute o `docker-compose`:
+2. Para auxiliar transferi para o Docker Registry imagens menores dos contêineres `ubuntu-novnc` e `kali-xrdp`. Se desejar utilizar as imagens compilada acima será necessário trocar as seguintes linhas do arquivo `docker-compose.yaml`:
+
+```bash
+image: ubuntu-novnc:1.0.0
+
+(...)
+
+image: kali-xrdp:1.0.0
+```
+
+3. Agora entre na pasta do curso e execute o `docker-compose`:
 
 ```bash
 $ cd ../seg42
@@ -20,6 +30,12 @@ $ docker-compose up -d
 ```
 
 3. Abra o seu navegador e acesse http://localhost:8080/vnc.html. A senha de acesso está na variável VNC_PASSWORD do arquivo docker-compose.yaml.
+
+4. Para desligar a simulção execute dentro da pasta onde se encontra o arquivo `docker-compose.yaml`:
+
+```bash
+$ docker-compose down
+```
 
 ## Usuários
 
