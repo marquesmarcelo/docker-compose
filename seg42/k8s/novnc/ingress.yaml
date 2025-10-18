@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: novnc-ingress
+  #namespace: user01-seg42
+  annotations:
+    ingressClassName: "nginx"
+spec:
+  rules:
+  - host: esr-user01.testbeds.rnp.br
+    http:
+      paths:
+        - path: /
+          pathType: Prefix #do / em diante
+          backend:
+            service:
+              name: svc-novnc
+              port:
+                number: 8080

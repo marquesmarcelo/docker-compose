@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thehive
+  labels:
+    app: thehive
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: thehive
+  template:
+    metadata:
+      labels:
+        app: thehive
+    spec:
+      containers:
+      - name: thehive
+        image: strangebee/thehive:5.2
+        args:
+          - --secret
+          - lab123456789
+          - --cql-hostnames
+          - cassandra
+          - --index-backend
+          - elasticsearch
+          - --es-hostnames
+          - elasticsearch
+          - --s3-endpoint
+          - http://minio:9002
+          - --s3-access-key
+          - minioadmin
+          - --s3-secret-key
+          - minioadmin
+          - --s3-use-path-access-style
+        env:
+          - name: JVM_OPTS
+            value: '"-Xms1024M -Xmx1024M"'
+        resources:
+          limits:
+            memory: 1.5Gi
+        volumeMounts:
+          - mountPath: /etc/thehive/application.conf
+            name: thehivedata
+            subPath: application.conf
+        ports:
+          - containerPort: 22
+            protocol: TCP
+          - containerPort: 443
+            protocol: TCP
+      volumes:
+        - name: thehivedata
+          persistentVolumeClaim:
+            claimName: thehivedata

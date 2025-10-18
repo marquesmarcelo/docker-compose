@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cortex-local
+  #namespace: user01-seg42
+  labels:
+    app: cortex-local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cortex-local
+  template:
+    metadata:
+      labels:
+        app: cortex-local
+    spec:
+      volumes:
+        - name: cortex-local-claim1
+          persistentVolumeClaim:
+            claimName: cortex-local-claim1
+        - name: cortex-local-claim2
+          persistentVolumeClaim:
+            claimName: cortex-local-claim2
+        - name: cortex-local-claim3
+          persistentVolumeClaim:
+            claimName: cortex-local-claim3
+      containers:
+      - name: cortex-local
+        image: thehiveproject/cortex:3.2
+        env:
+          - name: docker_job_directory
+            value: /tmp/cortex-jobs
+          - name: job_directory
+            value: /tmp/cortex-jobs
+        volumeMounts:
+          - mountPath: /tmp/cortex-jobs
+            name: cortex-local-claim1
+          - mountPath: /var/log/cortex
+            name: cortex-local-claim2
+          - mountPath: /cortex/application.conf
+            name: cortex-local-claim3
+            subPath: application.conf
+        ports:
+          - containerPort: 9001
+            protocol: TCP

@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cassandra
+  # namespace: user01-seg42
+  labels:
+    app: cassandra
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cassandra
+  template:
+    metadata:
+      labels:
+        app: cassandra
+    spec:
+      # nodeSelector:
+        # kubernetes.io/hostname: ids-rj
+      volumes:
+        - name: cassandradata
+          persistentVolumeClaim:
+            claimName: cassandradata
+      containers:
+      - name: cassandra
+        image: cassandra:4        
+        env:
+          - name: CASSANDRA_CLUSTER_NAME
+            value: TheHive
+        volumeMounts:
+          - mountPath: /var/lib/cassandra
+            name: cassandradata
+        ports:
+          - containerPort: 9042
+            protocol: TCP
+          - containerPort: 7000
+            protocol: TCP
+          - containerPort: 7001
+            protocol: TCP

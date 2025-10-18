@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-novnc
+  # namespace: user01-seg42
+  labels:
+    app: novnc
+spec:
+  # Otimizado para ClusterIP, pois o Ingress gerencia o acesso externo
+  type: ClusterIP 
+  ports:
+  - name: "novnc-http"
+    port: 8080
+    targetPort: 8080
+    # nodePort: 31080 (Removido, pois ClusterIP não usa NodePort)
+  selector:
+    app: novnc

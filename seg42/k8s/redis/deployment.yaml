@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  # namespace: user01-seg42
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      # nodeSelector:
+        # kubernetes.io/hostname: ids-rj
+      containers:
+      - name: redis
+        image: redis:alpine3.22
+        ports:
+          - containerPort: 6379 
+            protocol: TCP

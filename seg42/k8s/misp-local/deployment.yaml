@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: misp-local
+  #namespace: user01-seg42
+  labels:
+    app: misp-local
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: misp-local
+  template:
+    metadata:
+      labels:
+        app: misp-local
+    spec:
+      containers:
+        - name: misp-local
+          image: coolacid/misp-docker:core-v2.4.176a
+          env:
+            - name: CRON_USER_ID
+              value: "1"
+            - name: HOSTNAME
+              value: https://localhost
+            - name: INIT
+              value: "true"
+            - name: MISP_ADMIN_EMAIL
+              value: mispadmin@lab.local
+            - name: MISP_ADMIN_PASSPHRASE
+              value: mispadminpass
+            - name: MISP_BASEURL
+              value: localhost
+            - name: MYSQL_DATABASE
+              value: mispdb
+            - name: MYSQL_HOST
+              value: svc-misp-mysql # Deve ser o nome do Service do seu Mysql
+            - name: MYSQL_PASSWORD
+              value: misppass
+            - name: MYSQL_USER
+              value: mispuser
+            - name: REDIS_FQDN
+              value: svc-redis # Deve ser o nome do Service do seu Redis
+            - name: TIMEZONE
+              value: America/Sao_Paulo
+          volumeMounts:
+            - mountPath: /var/www/MISP/app/Config
+              name: misp-local-claim0
+            - mountPath: /var/www/MISP/app/tmp/logs
+              name: misp-local-claim1
+            - mountPath: /var/www/MISP/app/files
+              name: misp-local-claim2
+            - mountPath: /etc/nginx/certs
+              name: misp-local-claim3
+          ports:
+            - containerPort: 80
+              protocol: TCP
+            - containerPort: 443
+              protocol: TCP
+      volumes:
+        - name: misp-local-claim0
+          persistentVolumeClaim:
+            claimName: misp-local-claim0
+        - name: misp-local-claim1
+          persistentVolumeClaim:
+            claimName: misp-local-claim1
+        - name: misp-local-claim2
+          persistentVolumeClaim:
+            claimName: misp-local-claim2
+        - name: misp-local-claim3
+          persistentVolumeClaim:
+            claimName: misp-local-claim3

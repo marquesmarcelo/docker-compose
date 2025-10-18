@@ -1,0 +1,5 @@
+# Definição do Namespace (um por aluno)
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: user01-seg42

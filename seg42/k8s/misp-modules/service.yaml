@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-misp-modules
+  # namespace: user01-seg42
+  labels:
+    app: misp-modules
+spec:
+  type: ClusterIP
+  selector:
+    app: misp-modules
+  ports:
+    - name: "misp-modules-api"
+      protocol: TCP
+      port: 9999
+      targetPort: 9999

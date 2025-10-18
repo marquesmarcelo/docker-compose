@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: elasticsearch
+  # namespace: user01-seg42
+  labels:
+    app: elasticsearch
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: elasticsearch
+  template:
+    metadata:
+      labels:
+        app: elasticsearch
+    spec:
+      # nodeSelector:
+        # kubernetes.io/hostname: ids-rj
+      volumes:
+        - name: elasticsearchdata
+          persistentVolumeClaim:
+            claimName: elasticsearchdata
+      containers:
+      - name: elasticsearch
+        image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
+        env:
+          # JVM_OPTS e limite de memória devem ser consistentes
+          - name: ES_JAVA_OPTS
+            value: -Xms256m -Xmx256m 
+          - name: cluster.name
+            value: hive
+          - name: discovery.type
+            value: single-node
+          - name: http.host
+            value: 0.0.0.0
+          - name: xpack.security.enabled
+            value: "false"
+        resources:
+          limits:
+            memory: 512Mi
+        volumeMounts:
+          - mountPath: /usr/share/elasticsearch/data
+            name: elasticsearchdata
+        ports:
+          - containerPort: 9200
+            protocol: TCP
+          - containerPort: 9300 
+            protocol: TCP

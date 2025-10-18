@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: misp-mysql
+  #namespace: user01-seg42
+  labels:
+    app: misp-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: misp-mysql
+  template:
+    metadata:
+      labels:
+        app: misp-mysql
+    spec:
+      containers:
+        - name: misp-mysql
+          image: mysql/mysql-server:5.7
+          env:
+            - name: MYSQL_DATABASE
+              value: mispdb
+            - name: MYSQL_PASSWORD
+              value: misppass
+            - name: MYSQL_ROOT_PASSWORD
+              value: mispass
+            - name: MYSQL_USER
+              value: mispuser
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mispsqldata
+          ports:
+            - containerPort: 3306
+              protocol: TCP
+      volumes:
+        - name: mispsqldata
+          persistentVolumeClaim:
+            claimName: mispsqldata

@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-kali-xrdp
+  # namespace: user01-seg42 (Descomente se estiver usando namespace)
+  labels:
+    app: kali-xrdp
+spec:
+  type: ClusterIP
+  selector:
+    app: kali-xrdp
+  ports:
+  - name: "kali-rdp"
+    port: 3389
+    targetPort: 3389
+  - name: "kali-ssh"
+    port: 22
+    targetPort: 22

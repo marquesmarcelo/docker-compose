@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: novnc
+  # namespace: user01-seg42
+  labels:
+    app: novnc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: novnc
+  template:
+    metadata:
+      labels:
+        app: novnc
+    spec:
+      # nodeSelector:
+        # kubernetes.io/hostname: ids-rj
+      containers:
+      - name: novnc
+        image: marquesmarcelo/esr-novnc:22.04
+        env:
+          - name: DISPLAY
+            value: :1
+          - name: NOVNC_PORT
+            value: "8080"
+          - name: VNC_PASSWORD
+            value: rnpesr
+          - name: VNC_PORT
+            value: "5900"
+          - name: VNC_RESOLUTION
+            value: 1920x1080
+        ports:
+          - containerPort: 8080
+            protocol: TCP

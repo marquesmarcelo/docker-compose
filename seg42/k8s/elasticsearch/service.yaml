@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: svc-elasticsearch # Este será o hostname DNS interno
+  # namespace: user01-seg42
+  labels:
+    app: elasticsearch
+spec:
+  type: ClusterIP  
+  selector:
+    app: elasticsearch
+  ports:
+    - name: "elasticsearch-api"
+      protocol: TCP
+      port: 9200
+      targetPort: 9200
+    - name: "elasticsearch-transport"
+      protocol: TCP
+      port: 9300
+      targetPort: 9300

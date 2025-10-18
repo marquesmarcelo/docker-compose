@@ -1,7 +1,7 @@
 version: "3.7"
 services:
 
-  ubuntu-novnc:
+  novnc:
     image: ubuntu-novnc:1.0.0
     ports:
       - 8080:8080
@@ -79,7 +79,7 @@ services:
       - SOC_NET
 
   minio:
-    image: quay.io/minio/minio
+    image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
     restart: unless-stopped
     command: ["minio", "server", "/data", "--console-address", ":9002"]
     environment:
@@ -92,7 +92,7 @@ services:
 
 #appended .local onto the container name because when we integrate cortex with TheHive using the new GUI menu it only accept a FQDN.
   cortex.local:
-    image: thehiveproject/cortex:latest
+    image: thehiveproject/cortex:3.2
     restart: unless-stopped
     environment:
       - job_directory=/tmp/cortex-jobs
@@ -113,7 +113,7 @@ services:
       - SOC_NET
   #appended .local onto the container name because when we integrate MISP with TheHive using the new GUI menu it only accepts a FQDN.
   misp.local:
-    image: coolacid/misp-docker:core-latest
+    image: coolacid/misp-docker:core-v2.4.176a
     restart: unless-stopped
     depends_on: 
       - misp_mysql
@@ -151,11 +151,11 @@ services:
     networks:
       - SOC_NET
   redis:
-    image: redis:latest
+    image: redis:alpine3.22
     networks:
       - SOC_NET
   misp-modules:
-    image: coolacid/misp-docker:modules-latest
+    image: coolacid/misp-docker:modules-v2.4.176a
     environment:
       - "REDIS_BACKEND=redis"
     depends_on:

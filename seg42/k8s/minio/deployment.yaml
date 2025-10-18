@@ -1,0 +1,42 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: minio
+  #namespace: user01-seg42
+  labels:
+    app: minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: minio
+  template:
+    metadata:
+      labels:
+        app: minio
+    spec:
+      # nodeSelector:
+      #   kubernetes.io/hostname: ids-rj
+      volumes:
+        - name: miniodata
+          persistentVolumeClaim:
+            claimName: miniodata
+      containers:
+      - name: minio
+        image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
+        args:
+          - server
+          - /data
+          - --console-address
+          - ":9002"
+        env:
+          - name: MINIO_ROOT_PASSWORD
+            value: minioadmin
+          - name: MINIO_ROOT_USER
+            value: minioadmin
+        volumeMounts:
+          - mountPath: /data
+            name: miniodata
+        ports:
+          - containerPort: 9002
+            protocol: TCP
