@@ -3,7 +3,6 @@
 set -e
 
 echo "==> Configurando senha do VNC..."
-mkdir -p /home/aluno/.vnc
-x11vnc -storepasswd "$VNC_PASSWORD" /home/aluno/.vnc/passwd
+x11vnc -storepasswd $VNC_PASSWORD /home/aluno/.vnc/passwd
 chown -R aluno:aluno /home/aluno/.vnc
 echo "Senha do VNC armazenada em /home/aluno/.vnc/passwd"

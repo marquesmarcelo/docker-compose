@@ -128,10 +128,12 @@ RUN mkdir -p /home/aluno/.vnc
 RUN mkdir -p /tmp/.X11-unix
 RUN touch /home/aluno/.Xauthority
 
+# Configurar senha do VNXC
+RUN mkdir -p /home/aluno/.vnc
+RUN x11vnc -storepasswd "changeme" /home/aluno/.vnc/passwd
 
 EXPOSE ${NOVNC_PORT}
 EXPOSE ${VNC_PORT}
-
 
 #ENTRYPOINT ["/usr/local/bin/start.sh"]
 # Supervisord é o processo principal do container

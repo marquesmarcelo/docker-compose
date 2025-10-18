@@ -6,9 +6,11 @@ services:
     ports:
       - 8080:8080
     environment:
+      - DISPLAY=:1
       - VNC_PASSWORD=rnpesr
       - VNC_RESOLUTION=1920x1080
       - NOVNC_PORT=8080
+      - VNC_PORT=5900
     networks:
       - SOC_NET
 
