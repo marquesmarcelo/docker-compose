@@ -8,9 +8,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=America/Sao_Paulo
 
 # Evita prompts interativos durante a instalação
-ENV DEBIAN_FRONTEND=noninteractive \
-    TZ=America/Sao_Paulo \
-    VNC_PASSWORD="changeme" \
+ENV VNC_PASSWORD="changeme" \
     VNC_RESOLUTION="1024x768" \
     VNC_PORT="5900" \
     NOVNC_PORT="6080"
@@ -30,7 +28,9 @@ RUN apt-get update && \
         inetutils-ping net-tools iproute2 ufw tcpdump \
         curl wget sudo vim nano \
         openssh-server ssh openssh-client \
-        apt-transport-https ca-certificates software-properties-common
+        apt-transport-https ca-certificates software-properties-common \
+        gnupg2 gnupg-agent \
+        zenity supervisor
 
 # Cria usuário 'aluno' com senha 'rnpesr' e acesso sudo
 RUN useradd -m -s /bin/bash aluno && \
@@ -51,8 +51,7 @@ RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/
 #RUN apt install -y language-pack-pt language-pack-pt-base
 #RUN update-locale LANG=pt_BR.UTF-8
 
-RUN apt-get update && \
-    apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         dbus-x11 \
         git \
         locales \
@@ -72,10 +71,10 @@ RUN add-apt-repository -y ppa:mozillateam/ppa && \
     echo "Package: *"  > /etc/apt/preferences.d/mozilla-firefox && \
     echo "Pin: release o=LP-PPA-mozillateam" >> /etc/apt/preferences.d/mozilla-firefox && \
     echo "Pin-Priority: 1001" >> /etc/apt/preferences.d/mozilla-firefox && \
-    apt-get update && \
-    apt-get install -y --no-install-recommends firefox
+    apt-get update
 
-RUN apt-get update && apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
+    firefox \
     xfce4 \
     x11vnc \
     novnc \
@@ -85,21 +84,30 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     python3 \
     python3-pip \
     dbus-x11 \
-    net-tools \
-    remmina
+    net-tools
+
+RUN apt-get install -y --no-install-recommends \
+  remmina \
+  remmina-plugin-rdp \
+  remmina-plugin-vnc \
+  remmina-plugin-secret \
+  freerdp2-x11 \
+  libsecret-1-0 \
+  gnome-icon-theme \
+  adwaita-icon-theme \
+  gnome-themes-extra \
+  gtk2-engines-murrine \
+  gtk2-engines-pixbuf
 
 # Copia script de inicialização
 COPY start.sh /usr/local/bin/start.sh
 RUN chmod +x /usr/local/bin/start.sh
-
-RUN apt-get install -y --no-install-recommends gnupg2 gnupg-agent
 
 # Troca o texto do logo nos arquivos HTML usando sed
 RUN sed -i 's|<span>no</span><br>VNC|<span>ESR/</span><br>RNP|g' /usr/share/novnc/vnc.html && \
     sed -i 's|<span>no</span>VNC|<span>ESR/</span>RNP|g' /usr/share/novnc/vnc.html
 
 # Criar um executavel para bloquear o logout.. Ainda não funciona!!
-RUN apt install -y --no-install-recommends zenity supervisor
 COPY ./no_logout.sh /usr/local/bin/no_logout.sh
 RUN chmod +x /usr/local/bin/no_logout.sh
 

@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: kali-xrdp
+  name: pod-kali-xrdp
   # namespace: user01-seg42
   labels:
-    app: kali-xrdp
+    app: pod-kali-xrdp
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: kali-xrdp
+      app: pod-kali-xrdp
   template:
     metadata:
       labels:
-        app: kali-xrdp
+        app: pod-kali-xrdp
     spec:
       # nodeSelector:
         # kubernetes.io/hostname: ids-rj
       containers:
-      - name: kali-xrdp
+      - name: pod-kali-xrdp
         image: marquesmarcelo/esr-ubuntu-gui:25.04
         ports:
           - containerPort: 22 

@@ -1,20 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-thehive
+  name: thehive
   # namespace: user01-seg42
   labels:
     app: thehive
 spec:
   type: ClusterIP 
   selector:
-    app: thehive
+    app: pod-thehive
   ports:
-    - name: "thehive-https"
+    - name: "thehive-http"
       protocol: TCP
-      port: 443
-      targetPort: 443
-    - name: "thehive-ssh"
-      protocol: TCP
-      port: 22
-      targetPort: 22
+      port: 9000
+      targetPort: 9000

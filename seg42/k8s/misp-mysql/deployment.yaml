@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: misp-mysql
+  name: pod-misp-mysql
   #namespace: user01-seg42
   labels:
-    app: misp-mysql
+    app: pod-misp-mysql
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: misp-mysql
+      app: pod-misp-mysql
   template:
     metadata:
       labels:
-        app: misp-mysql
+        app: pod-misp-mysql
     spec:
       containers:
-        - name: misp-mysql
+        - name: pod-misp-mysql
           image: mysql/mysql-server:5.7
           env:
             - name: MYSQL_DATABASE

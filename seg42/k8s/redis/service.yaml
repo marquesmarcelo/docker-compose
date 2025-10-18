@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-redis
+  name: redis
   # namespace: user01-seg42 (Descomente se estiver usando namespace)
   labels:
     app: redis
 spec:
   type: ClusterIP
   selector:
-    app: redis 
+    app: pod-redis 
   ports:
   - name: "redis-api"
     port: 6379

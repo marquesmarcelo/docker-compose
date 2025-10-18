@@ -1,24 +1,24 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: novnc
+  name: pod-novnc
   # namespace: user01-seg42
   labels:
-    app: novnc
+    app: pod-novnc
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: novnc
+      app: pod-novnc
   template:
     metadata:
       labels:
-        app: novnc
+        app: pod-novnc
     spec:
       # nodeSelector:
         # kubernetes.io/hostname: ids-rj
       containers:
-      - name: novnc
+      - name: pod-novnc
         image: marquesmarcelo/esr-novnc:22.04
         env:
           - name: DISPLAY
@@ -33,4 +33,6 @@ spec:
             value: 1920x1080
         ports:
           - containerPort: 8080
+            protocol: TCP
+          - containerPort: 5900
             protocol: TCP

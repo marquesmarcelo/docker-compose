@@ -1,24 +1,16 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-cassandra
+  name: cassandra
   # namespace: user01-seg42
   labels:
     app: cassandra
 spec:
   type: ClusterIP
   selector:
-    app: cassandra
+    app: pod-cassandra
   ports:
-    - name: "cassandra-cql"
-      protocol: TCP
-      port: 9042
-      targetPort: 9042
-    - name: "cassandra-port1"
+    - name: "cassandra-port"
       protocol: TCP
       port: 7000
       targetPort: 7000
-    - name: "cassandra-port2"
-      protocol: TCP
-      port: 7001
-      targetPort: 7001

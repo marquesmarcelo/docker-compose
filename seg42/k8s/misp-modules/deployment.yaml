@@ -1,28 +1,28 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: misp-modules
+  name: pod-misp-modules
   # namespace: user01-seg42
   labels:
-    app: misp-modules
+    app: pod-misp-modules
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: misp-modules
+      app: pod-misp-modules
   template:
     metadata:
       labels:
-        app: misp-modules
+        app: pod-misp-modules
     spec:
       # nodeSelector:
         # kubernetes.io/hostname: ids-rj
       containers:
-      - name: misp-modules
+      - name: pod-misp-modules
         image: coolacid/misp-docker:modules-v2.4.176a
         env:
           - name: REDIS_BACKEND
             value: svc-redis
         ports:
-          - containerPort: 9999 
+          - containerPort: 6666 
             protocol: TCP

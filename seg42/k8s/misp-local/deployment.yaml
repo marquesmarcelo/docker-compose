@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: misp-local
+  name: pod-misp-local
   #namespace: user01-seg42
   labels:
-    app: misp-local
+    app: pod-misp-local
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: misp-local
+      app: pod-misp-local
   template:
     metadata:
       labels:
-        app: misp-local
+        app: pod-misp-local
     spec:
       containers:
-        - name: misp-local
+        - name: pod-misp-local
           image: coolacid/misp-docker:core-v2.4.176a
           env:
             - name: CRON_USER_ID

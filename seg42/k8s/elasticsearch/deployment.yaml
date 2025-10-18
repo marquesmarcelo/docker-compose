@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: elasticsearch
+  name: pod-elasticsearch
   # namespace: user01-seg42
   labels:
-    app: elasticsearch
+    app: pod-elasticsearch
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: elasticsearch
+      app: pod-elasticsearch
   template:
     metadata:
       labels:
-        app: elasticsearch
+        app: pod-elasticsearch
     spec:
       # nodeSelector:
         # kubernetes.io/hostname: ids-rj
@@ -22,7 +22,7 @@ spec:
           persistentVolumeClaim:
             claimName: elasticsearchdata
       containers:
-      - name: elasticsearch
+      - name: pod-elasticsearch
         image: docker.elastic.co/elasticsearch/elasticsearch:7.17.9
         env:
           # JVM_OPTS e limite de memória devem ser consistentes
@@ -44,6 +44,4 @@ spec:
             name: elasticsearchdata
         ports:
           - containerPort: 9200
-            protocol: TCP
-          - containerPort: 9300 
             protocol: TCP

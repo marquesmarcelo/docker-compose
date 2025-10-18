@@ -1,9 +1,15 @@
 # Build xrdp pulseaudio modules in builder container
 # See https://github.com/neutrinolabs/pulseaudio-module-xrdp/wiki/README
 FROM kalilinux/kali-rolling
+LABEL maintainer="Francisco Marcelo, <marques.marcelo@gmail.com>"
+LABEL version="v0.1"
 
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
+# Evita prompts interativos durante a instalação
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=America/Sao_Paulo
+
+RUN apt-get update
+RUN apt-get install -y --no-install-recommends \
         autoconf \
         build-essential \
         ca-certificates \
@@ -14,8 +20,8 @@ RUN apt-get update && \
         libtool \
         libltdl-dev \
         doxygen \
-        sudo && \
-    rm -rf /var/lib/apt/lists/*
+        sudo \
+        openssh-server ssh openssh-client
 
 RUN git clone https://github.com/neutrinolabs/pulseaudio-module-xrdp.git /pulseaudio-module-xrdp
 WORKDIR /pulseaudio-module-xrdp
@@ -25,12 +31,7 @@ RUN scripts/install_pulseaudio_sources_apt.sh && \
     make && \
     make install DESTDIR=/tmp/install
 
-
-# Build the final image
-FROM kalilinux/kali-rolling
-
-RUN apt-get update && \
-    DEBIAN_FRONTEND="noninteractive" apt-get install -y --no-install-recommends \
+RUN apt-get install -y --no-install-recommends \
         dbus-x11 \
         git \
         locales \
@@ -45,28 +46,41 @@ RUN apt-get update && \
         xfce4-goodies \
         xfce4-pulseaudio-plugin \
         xorgxrdp \
-        firefox-esr \
-        ssh \
-        
-        xrdp && \
-    rm -rf /var/lib/apt/lists/* && \
-    locale-gen en_US.UTF-8
+        firefox-esr \          
+        xrdp
 
-RUN apt-get update && \
-  DEBIAN_FRONTEND="noninteractive" sudo apt install -y --no-install-recommends \
-  kali-tools-detect \
-  kali-tools-identify \
-  kali-tools-protect \
-  kali-tools-respond \
-  kali-tools-recover \
-  kali-themes-purple
+# Cria usuário 'aluno' com senha 'rnpesr' e acesso sudo
+RUN useradd -m -s /bin/bash aluno && \
+    echo "aluno:rnpesr" | chpasswd
+
+# Trocar a senha do root para conteúdo complexo e restrito
+RUN echo "root:rnpesr" | chpasswd
+
+# Permite login com senha (opcional, mas útil para testes)
+RUN sed -i 's/#PasswordAuthentication yes/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/' /etc/ssh/sshd_config && \
+    sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config
+
+RUN apt install -y --no-install-recommends \
+   kali-themes-purple
+#  kali-tools-detect \
+#  kali-tools-identify \
+#  kali-tools-protect \
+#  kali-tools-respond \
+#  kali-tools-recover \
 
 #RUN sed -i 's|^Exec=.*|Exec=/usr/bin/pulseaudio|' /etc/xdg/autostart/pulseaudio-xrdp.desktop
 
-RUN apt install xfce4-power-manager -y
+RUN apt install -y --no-install-recommends \
+    xfce4-power-manager xfce4-power-manager-plugins xfce4-goodies
 
-ENV LANG=en_US.UTF-8
+# Limpar o apt
+RUN apt clean all
+RUN rm -rf /var/lib/apt/lists/*
+
+EXPOSE 3389/tcp
+EXPOSE 22/tcp
+
 COPY entrypoint.sh /usr/bin/entrypoint
 RUN chmod +x /usr/bin/entrypoint
-EXPOSE 3389/tcp
 ENTRYPOINT ["/usr/bin/entrypoint"]

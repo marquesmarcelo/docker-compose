@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cortex-local
+  name: pod-cortex-local
   #namespace: user01-seg42
   labels:
-    app: cortex-local
+    app: pod-cortex-local
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cortex-local
+      app: pod-cortex-local
   template:
     metadata:
       labels:
-        app: cortex-local
+        app: pod-cortex-local
     spec:
       volumes:
         - name: cortex-local-claim1
@@ -26,7 +26,7 @@ spec:
           persistentVolumeClaim:
             claimName: cortex-local-claim3
       containers:
-      - name: cortex-local
+      - name: pod-cortex-local
         image: thehiveproject/cortex:3.2
         env:
           - name: docker_job_directory

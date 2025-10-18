@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: thehive
+  name: pod-thehive
   labels:
-    app: thehive
+    app: pod-thehive
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: thehive
+      app: pod-thehive
   template:
     metadata:
       labels:
-        app: thehive
+        app: pod-thehive
     spec:
       containers:
-      - name: thehive
+      - name: pod-thehive
         image: strangebee/thehive:5.2
         args:
           - --secret
@@ -44,9 +44,7 @@ spec:
             name: thehivedata
             subPath: application.conf
         ports:
-          - containerPort: 22
-            protocol: TCP
-          - containerPort: 443
+          - containerPort: 9000
             protocol: TCP
       volumes:
         - name: thehivedata

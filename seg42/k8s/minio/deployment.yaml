@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: minio
+  name: pod-minio
   #namespace: user01-seg42
   labels:
-    app: minio
+    app: pod-minio
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: minio
+      app: pod-minio
   template:
     metadata:
       labels:
-        app: minio
+        app: pod-minio
     spec:
       # nodeSelector:
       #   kubernetes.io/hostname: ids-rj
@@ -22,7 +22,7 @@ spec:
           persistentVolumeClaim:
             claimName: miniodata
       containers:
-      - name: minio
+      - name: pod-minio
         image: quay.io/minio/minio:RELEASE.2025-07-23T15-54-02Z-cpuv1
         args:
           - server
@@ -38,5 +38,7 @@ spec:
           - mountPath: /data
             name: miniodata
         ports:
+          - containerPort: 9000
+            protocol: TCP
           - containerPort: 9002
             protocol: TCP

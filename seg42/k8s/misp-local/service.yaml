@@ -1,14 +1,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: svc-misp-local
+  name: misp-local
   # namespace: user01-seg42
   labels:
     app: misp-local
 spec:
   type: ClusterIP
   selector:
-    app: misp-local
+    app: pod-misp-local
   ports:    
     - name: "misp-local-http"
       protocol: TCP

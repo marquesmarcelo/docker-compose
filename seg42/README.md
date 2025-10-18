@@ -30,7 +30,8 @@ Abaixo a lista de usuários e senhas desta simulação:
 | **noVNC** | - | rnpesr |
 | **root** | - | rnpesr |
 | **aluno** | - | rnpesr |
-| **Cortex** | admin | labuser |
-| **MISP** | admin@admin.test | admin ou RnpEsr123456@ |
-| **TheHive** | admin@thehive.local | secret |
+| http://cortex-local:9001 | admin | labuser |
+| https://misp-local | admin@admin.test | admin ou RnpEsr123456@ |
+| http://thehive:9000 | admin@thehive.local | secret |
+| http://minio:9002 | minioadmin | minioadmin |
 
