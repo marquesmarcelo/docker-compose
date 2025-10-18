@@ -22,7 +22,7 @@ spec:
             - name: CRON_USER_ID
               value: "1"
             - name: HOSTNAME
-              value: https://localhost
+              value: https://misp-local
             - name: INIT
               value: "true"
             - name: MISP_ADMIN_EMAIL
@@ -30,17 +30,17 @@ spec:
             - name: MISP_ADMIN_PASSPHRASE
               value: mispadminpass
             - name: MISP_BASEURL
-              value: localhost
+              value: misp-local
             - name: MYSQL_DATABASE
               value: mispdb
             - name: MYSQL_HOST
-              value: svc-misp-mysql # Deve ser o nome do Service do seu Mysql
+              value: misp-mysql # Deve ser o nome do Service do seu Mysql
             - name: MYSQL_PASSWORD
               value: misppass
             - name: MYSQL_USER
               value: mispuser
             - name: REDIS_FQDN
-              value: svc-redis # Deve ser o nome do Service do seu Redis
+              value: redis # Deve ser o nome do Service do seu Redis
             - name: TIMEZONE
               value: America/Sao_Paulo
           volumeMounts:

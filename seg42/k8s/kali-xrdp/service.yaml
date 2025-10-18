@@ -8,7 +8,7 @@ metadata:
 spec:
   type: ClusterIP
   selector:
-    app: kali-xrdp
+    app: pod-kali-xrdp
   ports:
   - name: "kali-rdp"
     port: 3389

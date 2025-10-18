@@ -23,7 +23,7 @@ spec:
             claimName: cassandradata
       containers:
       - name: pod-cassandra
-        image: cassandra:4        
+        image: cassandra:4
         env:
           - name: CASSANDRA_CLUSTER_NAME
             value: TheHive
@@ -31,5 +31,5 @@ spec:
           - mountPath: /var/lib/cassandra
             name: cassandradata
         ports:
-          - containerPort: 7000
+          - containerPort: 9042
             protocol: TCP

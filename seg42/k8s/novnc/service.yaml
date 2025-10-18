@@ -7,15 +7,11 @@ metadata:
     app: novnc
 spec:
   # Otimizado para ClusterIP, pois o Ingress gerencia o acesso externo
-  type: ClusterIP 
+  type: NodePort 
   selector:
     app: pod-novnc
   ports:
   - name: "novnc-http"
     port: 8080
     targetPort: 8080
-    # nodePort: 31080 (Removido, pois ClusterIP não usa NodePort)
-  - name: "novnc-vnc"
-    port: 5900
-    targetPort: 5900
-    # nodePort: 31080 (Removido, pois ClusterIP não usa NodePort)
+    nodePort: 31080 #(Removido, pois ClusterIP não usa NodePort)

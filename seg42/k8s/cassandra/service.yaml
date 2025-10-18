@@ -12,5 +12,5 @@ spec:
   ports:
     - name: "cassandra-port"
       protocol: TCP
-      port: 7000
-      targetPort: 7000
+      port: 9042
+      targetPort: 9042

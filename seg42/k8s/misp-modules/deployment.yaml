@@ -22,7 +22,9 @@ spec:
         image: coolacid/misp-docker:modules-v2.4.176a
         env:
           - name: REDIS_BACKEND
-            value: svc-redis
+            value: "redis"
+          - name: REDIS_PORT
+            value: "6379"
         ports:
-          - containerPort: 6666 
+          - containerPort: 6666
             protocol: TCP
