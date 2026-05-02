@@ -1,0 +1,12 @@
+fastapi==0.115.12
+uvicorn[standard]==0.34.2
+httpx==0.28.1
+pydantic==2.11.4
+
+langchain==0.3.25
+langchain-core==0.3.59
+langchain-community==0.3.24
+langchain-ollama==0.3.2
+langgraph==0.4.3
+
+sseclient-py==1.8.0

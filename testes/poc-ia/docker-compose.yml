@@ -1,6 +1,65 @@
 version: "3.9"
 
 services:
+  agent-gateway:
+    build:
+      context: ./agent-gateway
+    container_name: agent-gateway
+    restart: always
+    depends_on:
+      - ollama
+      - alloydb
+      - mcp-hub
+      - n8n
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      MCP_URL: http://mcp-hub:8000
+      N8N_URL: http://n8n:5678
+      N8N_WEBHOOK: http://n8n:5678/webhook/agent
+      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
+      MODEL_NAME: qwen2.5:3b
+    ports:
+      - "8091:8000"
+
+  # =========================
+  # Uma API Fake para testes
+  # =========================
+  fake-api:
+    build: ./fake-api
+    container_name: fake-api
+    depends_on:
+      - alloydb
+    ports:
+      - "8081:8000"
+
+  # =========================
+  # Gateway LLM
+  # =========================
+  llm-gateway:
+    build: ./llm-gateway
+    container_name: llm-gateway
+    depends_on:
+      - ollama
+      - mcp-hub
+    ports:
+      - "8083:8000"
+    environment:
+      OLLAMA_URL: http://ollama:11434
+      DEFAULT_MODEL: qwen2.5:3b
+      MCP_URL: http://mcp-hub:8000
+
+  # =========================
+  # MCP para interagir com a API Fake
+  # =========================
+  mcp-hub:
+    build: ./mcp-hub
+    container_name: mcp-hub
+    environment:
+      API_URL: http://fake-api:8000
+    depends_on:
+      - fake-api
+    ports:
+      - "8082:8000"
 
   # =========================
   # INGEST / RAG API
@@ -42,11 +101,10 @@ services:
     volumes:
       - alloydb_data:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U agent -d agentdb"]
+      test: [ "CMD-SHELL", "pg_isready -U agent -d agentdb" ]
       interval: 10s
       timeout: 5s
       retries: 10
-
 
   # =========================
   # LLM + EMBEDDINGS (GPU)
@@ -65,7 +123,6 @@ services:
       OLLAMA_NUM_PARALLEL: "2"
       OLLAMA_MAX_LOADED_MODELS: "2"
 
-
   # =========================
   # OPENWEBUI (UI LLM)
   # =========================
@@ -83,6 +140,7 @@ services:
       ENABLE_OLLAMA_API: "true"
       OLLAMA_BASE_URL: "http://ollama:11434"
       DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
+      ENABLE_DIRECT_CONNECTIONS: "true"
     volumes:
       - openwebui_data:/app/backend/data
 
@@ -98,7 +156,6 @@ services:
       - "6379:6379"
     volumes:
       - redis_data:/data
-
 
   # =========================
   # RABBITMQ (fila de jobs)
@@ -116,6 +173,23 @@ services:
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
+  # =========================
+  # n8n
+  # =========================
+  n8n:
+    image: n8nio/n8n:latest
+    container_name: n8n
+    restart: always
+    ports:
+      - "5678:5678"
+    environment:
+      N8N_HOST: n8n
+      N8N_PORT: 5678
+      N8N_PROTOCOL: http
+      NODE_ENV: production
+      WEBHOOK_URL: http://localhost:5678/
+    volumes:
+      - n8n_data:/home/node/.n8n
 
 volumes:
   alloydb_data:
@@ -123,3 +197,4 @@ volumes:
   openwebui_data:
   redis_data:
   rabbitmq_data:
+  n8n_data:

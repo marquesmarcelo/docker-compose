@@ -1,0 +1,14 @@
+fastapi
+uvicorn[standard]
+
+langgraph
+langchain
+langchain-core
+langchain-community
+langchain-ollama
+
+httpx
+psycopg[binary]
+pgvector
+
+pydantic
