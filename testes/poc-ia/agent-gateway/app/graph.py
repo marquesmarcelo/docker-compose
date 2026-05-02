@@ -7,7 +7,9 @@ from app.nodes.mcp_node import mcp_node
 from app.nodes.llm_node import llm_node
 from app.nodes.n8n_node import n8n_node
 from app.nodes.rag import rag_node
+from app.config import get_logger
 
+logger = get_logger(__name__)
 
 class AgentState(TypedDict):
     question: str
@@ -21,7 +23,7 @@ class AgentState(TypedDict):
 def router(state: AgentState):
     route = state["route"]
 
-    print(f"[GRAPH] route={route}")
+    logger.info(f"[GRAPH] route={route}")
 
     if route == "mcp":
         return "mcp"

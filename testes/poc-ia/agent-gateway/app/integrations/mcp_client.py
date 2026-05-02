@@ -2,10 +2,10 @@ import asyncio
 import json
 import uuid
 import httpx
-import os
 
-MCP_URL = os.getenv("MCP_URL", "http://mcp-hub:8000")
+from app.config import settings, get_logger
 
+logger = get_logger(__name__)
 
 class MCPClient:
     def __init__(self):
@@ -18,29 +18,40 @@ class MCPClient:
         if self.listener_task:
             return
 
-        print("Conectando no MCP...")
+        logger.info("Conectando no MCP...")
 
         async def listen():
-            async with self.client.stream("GET", f"{MCP_URL}/sse") as resp:
-                async for line in resp.aiter_lines():
-                    if not line:
-                        continue
+            while True:
+                try:
+                    async with self.client.stream("GET", f"{settings.MCP_URL}/sse") as resp:
+                        resp.raise_for_status()
+                        async for line in resp.aiter_lines():
+                            if not line:
+                                continue
 
-                    print("MCP SSE:", line)
+                            logger.debug(f"MCP SSE: {line}")
 
-                    if line.startswith("data:"):
-                        payload = line.replace("data:", "").strip()
+                            if line.startswith("data:"):
+                                payload = line.replace("data:", "").strip()
 
-                        if payload.startswith("/messages?session_id="):
-                            self.session_id = payload.split("session_id=")[1]
-                            print("MCP session:", self.session_id)
-                            continue
+                                if payload.startswith("/messages?session_id="):
+                                    self.session_id = payload.split("session_id=")[1]
+                                    logger.info(f"MCP session: {self.session_id}")
+                                    continue
 
-                        try:
-                            msg = json.loads(payload)
-                            await self.queue.put(msg)
-                        except Exception:
-                            pass
+                                try:
+                                    msg = json.loads(payload)
+                                    await self.queue.put(msg)
+                                except Exception:
+                                    pass
+                except httpx.ReadError as e:
+                    logger.warning(f"Conexão com MCP interrompida (ReadError): {e}. Tentando reconectar...")
+                except Exception as e:
+                    logger.error(f"Erro no Listener do MCP: {e}. Tentando reconectar em 5s...", exc_info=True)
+                
+                # Se falhar, reseta a session para forçar novo setup e espera um pouco
+                self.session_id = None
+                await asyncio.sleep(5)
 
         self.listener_task = asyncio.create_task(listen())
 
@@ -65,7 +76,7 @@ class MCPClient:
             }
         }
         await self.client.post(
-            f"{MCP_URL}/messages?session_id={self.session_id}",
+            f"{settings.MCP_URL}/messages?session_id={self.session_id}",
             json=init_payload,
         )
 
@@ -83,7 +94,7 @@ class MCPClient:
             "method": "notifications/initialized"
         }
         await self.client.post(
-            f"{MCP_URL}/messages?session_id={self.session_id}",
+            f"{settings.MCP_URL}/messages?session_id={self.session_id}",
             json=notif_payload,
         )
 
@@ -102,10 +113,11 @@ class MCPClient:
             },
         }
 
-        print("POST MCP:", payload)
+        logger.info(f"POST MCP Tool Call: {tool_name}")
+        logger.debug(f"Payload: {payload}")
 
         await self.client.post(
-            f"{MCP_URL}/messages?session_id={self.session_id}",
+            f"{settings.MCP_URL}/messages?session_id={self.session_id}",
             json=payload,
         )
 

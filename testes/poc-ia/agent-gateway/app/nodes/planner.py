@@ -1,5 +1,7 @@
 import re
+from app.config import get_logger
 
+logger = get_logger(__name__)
 
 def extract_server(text: str):
     """
@@ -16,12 +18,13 @@ async def planner_node(state: dict):
     Decide para onde roteia:
     - MCP
     - n8n
+    - RAG
     - LLM
     """
 
     question = state["question"].lower()
 
-    print(f"[PLANNER] question={question}")
+    logger.info(f"[PLANNER] question={question}")
 
     # -------------------------
     # rota MCP
@@ -50,7 +53,7 @@ async def planner_node(state: dict):
             },
         }
 
-        print("[PLANNER] -> MCP")
+        logger.info("[PLANNER] -> MCP")
         return route
 
     # -------------------------
@@ -66,7 +69,7 @@ async def planner_node(state: dict):
             "ticket",
         ]
     ):
-        print("[PLANNER] -> N8N")
+        logger.info("[PLANNER] -> N8N")
 
         return {
             **state,
@@ -85,7 +88,7 @@ async def planner_node(state: dict):
             "procedimento",
         ]
     ):
-        print("[PLANNER] -> RAG")
+        logger.info("[PLANNER] -> RAG")
 
         return {
             **state,
@@ -95,7 +98,7 @@ async def planner_node(state: dict):
     # -------------------------
     # fallback LLM
     # -------------------------
-    print("[PLANNER] -> LLM")
+    logger.info("[PLANNER] -> LLM")
 
     return {
         **state,

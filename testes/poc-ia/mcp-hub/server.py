@@ -91,27 +91,31 @@ app = FastAPI(lifespan=lifespan, title="MCP Infrastructure Gateway")
 # Middleware essencial para rodar em containers (resolve o erro 421)
 app.add_middleware(TrustedHostMiddleware, allowed_hosts=["*"])
 
-@app.get("/sse")
-async def handle_sse(request: Request):
-    """Estabelece a conexão persistente SSE com o Open WebUI."""
-    async with sse.connect_sse(
-        request.scope, 
-        request.receive, 
-        request._send
-    ) as (read_stream, write_stream):
-        # Na versão v1.x, passamos apenas os streams. 
-        # O transporte já gerencia os handlers internamente.
-        await mcp_server.run(
-            read_stream,
-            write_stream,
-            mcp_server.create_initialization_options()
-        )
+# ---------------------------------------------
+# Aplicativos ASGI Puros no FastAPI
+# Para que o Starlette/FastAPI não os encapsule 
+# como rotas normais e não gere 307 Redirect (app.mount), 
+# criamos classes com o método __call__.
+# ---------------------------------------------
+class SSEApp:
+    async def __call__(self, scope, receive, send):
+        async with sse.connect_sse(
+            scope, 
+            receive, 
+            send
+        ) as (read_stream, write_stream):
+            await mcp_server.run(
+                read_stream,
+                write_stream,
+                mcp_server.create_initialization_options()
+            )
 
-@app.post("/messages")
-async def handle_messages(request: Request):
-    """Trata as mensagens individuais enviadas pelo protocolo MCP via POST."""
-    # handle_post_message é o novo nome para handle_post_request na v1.x
-    return await sse.handle_post_message(request.scope, request.receive, request._send)
+class MessagesApp:
+    async def __call__(self, scope, receive, send):
+        await sse.handle_post_message(scope, receive, send)
+
+app.add_route("/sse", SSEApp(), methods=["GET"])
+app.add_route("/messages", MessagesApp(), methods=["POST"])
 
 if __name__ == "__main__":
     import uvicorn

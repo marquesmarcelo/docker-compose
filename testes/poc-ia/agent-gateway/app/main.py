@@ -5,23 +5,25 @@ from fastapi import FastAPI
 from app.schemas import ChatCompletionRequest
 from app.graph import graph
 from app.integrations.mcp_client import mcp
+from app.config import get_logger
 
+logger = get_logger(__name__)
 
 # ---------------------------------
 # startup / shutdown
 # ---------------------------------
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    print("Inicializando agent-gateway...")
+    logger.info("Inicializando agent-gateway...")
 
     # conecta no MCP e mantém SSE aberto
     await mcp.connect()
 
-    print("agent-gateway pronto.")
+    logger.info("agent-gateway pronto.")
 
     yield
 
-    print("Encerrando agent-gateway...")
+    logger.info("Encerrando agent-gateway...")
     await mcp.client.aclose()
 
 

@@ -1,5 +1,7 @@
 from app.integrations.mcp_client import mcp
+from app.config import get_logger
 
+logger = get_logger(__name__)
 
 async def mcp_node(state: dict):
     """
@@ -15,14 +17,17 @@ async def mcp_node(state: dict):
             "tool_result": None,
         }
 
-    print(f"[MCP NODE] calling tool={tool_name} args={tool_args}")
+    logger.info(f"[MCP NODE] calling tool={tool_name} args={tool_args}")
 
-    result = await mcp.call_tool(
-        tool_name,
-        tool_args,
-    )
-
-    print("[MCP NODE] result =", result)
+    try:
+        result = await mcp.call_tool(
+            tool_name,
+            tool_args,
+        )
+        logger.debug(f"[MCP NODE] result = {result}")
+    except Exception as e:
+        logger.error(f"[MCP NODE] erro ao chamar tool: {e}", exc_info=True)
+        result = None
 
     return {
         **state,

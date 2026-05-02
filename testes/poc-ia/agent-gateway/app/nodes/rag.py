@@ -1,5 +1,8 @@
 from app.integrations.ollama import llm
 from app.integrations.vector import search_vector
+from app.config import get_logger
+
+logger = get_logger(__name__)
 
 async def rag_node(state: dict):
     """
@@ -7,20 +10,20 @@ async def rag_node(state: dict):
     """
     question = state["question"]
 
-    print("[RAG NODE] searching context for:", question)
+    logger.info(f"[RAG NODE] searching context for: {question}")
     
     # Busca contexto no banco vetorial
     context = await search_vector(question)
 
     if not context:
-        print("[RAG NODE] no context found. Fallback to LLM standard answer.")
+        logger.info("[RAG NODE] no context found. Fallback to LLM standard answer.")
         response = await llm.ainvoke(question)
         return {
             **state,
             "answer": response.content,
         }
 
-    print("[RAG NODE] context found. Generating answer...")
+    logger.info("[RAG NODE] context found. Generating answer...")
     
     prompt = f"""Você é um assistente útil e preciso. Responda à pergunta do usuário baseando-se EXCLUSIVAMENTE no contexto fornecido abaixo. Se o contexto não tiver a resposta, diga que não sabe, não invente informações.
 

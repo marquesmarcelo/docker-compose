@@ -1,19 +1,16 @@
-import os
 import json
 import psycopg
 from langchain_ollama import OllamaEmbeddings
 
+from app.config import settings, get_logger
+
+logger = get_logger(__name__)
+
 # Embeddings Configuration
-OLLAMA_URL = os.getenv("OLLAMA_URL", "http://ollama:11434")
-EMBED_MODEL = os.getenv("EMBED_MODEL", "nomic-embed-text")
-
 embeddings_model = OllamaEmbeddings(
-    model=EMBED_MODEL,
-    base_url=OLLAMA_URL
+    model=settings.EMBED_MODEL,
+    base_url=settings.OLLAMA_URL
 )
-
-# Database Configuration
-DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://agent:agent123@alloydb:5432/agentdb")
 
 async def search_vector(query: str, top_k: int = 3, min_score: float = 0.25) -> str:
     """
@@ -26,11 +23,10 @@ async def search_vector(query: str, top_k: int = 3, min_score: float = 0.25) -> 
     # 2. Conectar ao banco e pesquisar
     results = []
     try:
-        # Usando psycopg de forma síncrona temporariamente 
-        # (Idealmente usaria psycopg.AsyncConnection, mas manteremos simples por compatibilidade)
-        with psycopg.connect(DATABASE_URL) as conn:
-            with conn.cursor() as cur:
-                cur.execute(
+        # Usando psycopg de forma assíncrona
+        async with await psycopg.AsyncConnection.connect(settings.DATABASE_URL) as conn:
+            async with conn.cursor() as cur:
+                await cur.execute(
                     """
                     SELECT chunk, (embedding <=> %s::vector) AS distance
                     FROM rag.documents
@@ -39,15 +35,16 @@ async def search_vector(query: str, top_k: int = 3, min_score: float = 0.25) -> 
                     """,
                     (json.dumps(vector), top_k)
                 )
-                rows = cur.fetchall()
+                rows = await cur.fetchall()
                 
                 for r in rows:
                     chunk = r[0]
                     distance = float(r[1])
                     if distance < min_score:
                         results.append(chunk)
+                        
     except Exception as e:
-        print(f"[VECTOR] Erro ao buscar: {e}")
+        logger.error(f"Erro ao buscar vetores: {e}", exc_info=True)
         return ""
     
     # Se não filtrou nenhum pelo score mínimo, mas tem retorno, pode voltar os melhores
