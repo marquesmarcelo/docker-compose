@@ -1,0 +1,125 @@
+version: "3.9"
+
+services:
+
+  # =========================
+  # INGEST / RAG API
+  # =========================
+  ingest-api:
+    build: ./ingest-api
+    container_name: ingest-api
+    restart: unless-stopped
+    depends_on:
+      - alloydb
+      - ollama
+    volumes:
+      - ./ingest-api:/app
+    ports:
+      - "8000:8000"
+    environment:
+      DB_HOST: alloydb
+      DB_NAME: agentdb
+      DB_USER: agent
+      DB_PASSWORD: agent123
+      OLLAMA_URL: http://ollama:11434
+
+  # =========================
+  # DATABASE (RAG + OpenWebUI)
+  # =========================
+  alloydb:
+    build:
+      context: ./alloydb
+      args:
+        OMNI_VERSION: "16.3.0"
+    container_name: alloydb
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: agent
+      POSTGRES_PASSWORD: agent123
+      POSTGRES_DB: agentdb
+    volumes:
+      - alloydb_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U agent -d agentdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+
+  # =========================
+  # LLM + EMBEDDINGS (GPU)
+  # =========================
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: unless-stopped
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+    gpus: all
+    environment:
+      OLLAMA_KEEP_ALIVE: "24h"
+      OLLAMA_NUM_PARALLEL: "2"
+      OLLAMA_MAX_LOADED_MODELS: "2"
+
+
+  # =========================
+  # OPENWEBUI (UI LLM)
+  # =========================
+  openwebui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: openwebui
+    restart: unless-stopped
+    depends_on:
+      - ollama
+      - alloydb
+    ports:
+      - "3000:8080"
+    environment:
+      WEBUI_SECRET_KEY: "troque-esta-chave"
+      ENABLE_OLLAMA_API: "true"
+      OLLAMA_BASE_URL: "http://ollama:11434"
+      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
+    volumes:
+      - openwebui_data:/app/backend/data
+
+  # =========================
+  # REDIS (cache / memory)
+  # =========================
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+
+  # =========================
+  # RABBITMQ (fila de jobs)
+  # =========================
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    restart: unless-stopped
+    environment:
+      RABBITMQ_DEFAULT_USER: agent
+      RABBITMQ_DEFAULT_PASS: agent123
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+
+volumes:
+  alloydb_data:
+  ollama_data:
+  openwebui_data:
+  redis_data:
+  rabbitmq_data:

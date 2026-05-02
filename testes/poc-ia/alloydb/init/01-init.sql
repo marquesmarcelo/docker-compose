@@ -1,0 +1,2 @@
+CREATE DATABASE openwebui;
+CREATE DATABASE langfuse;

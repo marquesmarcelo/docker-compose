@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+psycopg[binary]
+requests
+pypdf
+langchain-community
+langchain-text-splitters
+python-multipart
+numpy
+redis
+pika
+python-utils
+pytest
+pytest-asyncio
+pytest-cov
+httpx
+pydantic-settings
