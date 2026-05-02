@@ -3,11 +3,11 @@ import re
 
 def extract_server(text: str):
     """
-    Extrai srv-01 / srv-02 / srv-abc...
+    Extrai srv-01 / srv-02 / srv-abc... (retorna o último mencionado)
     """
-    m = re.search(r"\b(srv[-\w]+)\b", text.lower())
-    if m:
-        return m.group(1)
+    matches = re.findall(r"\b(srv[-\w]+)\b", text.lower())
+    if matches:
+        return matches[-1]
     return None
 
 

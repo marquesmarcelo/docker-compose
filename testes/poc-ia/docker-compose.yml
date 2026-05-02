@@ -33,22 +33,6 @@ services:
       - "8081:8000"
 
   # =========================
-  # Gateway LLM
-  # =========================
-  llm-gateway:
-    build: ./llm-gateway
-    container_name: llm-gateway
-    depends_on:
-      - ollama
-      - mcp-hub
-    ports:
-      - "8083:8000"
-    environment:
-      OLLAMA_URL: http://ollama:11434
-      DEFAULT_MODEL: qwen2.5:3b
-      MCP_URL: http://mcp-hub:8000
-
-  # =========================
   # MCP para interagir com a API Fake
   # =========================
   mcp-hub:
@@ -83,7 +67,7 @@ services:
       OLLAMA_URL: http://ollama:11434
 
   # =========================
-  # DATABASE (RAG + OpenWebUI)
+  # DATABASE com suporte a vetores
   # =========================
   alloydb:
     build:

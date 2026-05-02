@@ -47,6 +47,46 @@ class MCPClient:
         while not self.session_id:
             await asyncio.sleep(0.1)
 
+        # -----------------------------
+        # Realizar inicialização do MCP
+        # -----------------------------
+        init_id = str(uuid.uuid4())
+        init_payload = {
+            "jsonrpc": "2.0",
+            "id": init_id,
+            "method": "initialize",
+            "params": {
+                "protocolVersion": "2024-11-05",
+                "capabilities": {},
+                "clientInfo": {
+                    "name": "agent-gateway",
+                    "version": "1.0.0"
+                }
+            }
+        }
+        await self.client.post(
+            f"{MCP_URL}/messages?session_id={self.session_id}",
+            json=init_payload,
+        )
+
+        # Aguardar resposta do initialize
+        while True:
+            msg = await self.queue.get()
+            if msg.get("id") == init_id:
+                if "error" in msg:
+                    raise Exception(f"Erro no initialize: {msg['error']}")
+                break
+
+        # Enviar notification de initialized
+        notif_payload = {
+            "jsonrpc": "2.0",
+            "method": "notifications/initialized"
+        }
+        await self.client.post(
+            f"{MCP_URL}/messages?session_id={self.session_id}",
+            json=notif_payload,
+        )
+
     async def call_tool(self, tool_name: str, arguments: dict):
         await self.connect()
 

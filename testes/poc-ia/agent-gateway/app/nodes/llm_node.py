@@ -3,10 +3,12 @@ from langchain_ollama import ChatOllama
 
 
 MODEL = os.getenv("OLLAMA_MODEL", "qwen2.5:3b")
+OLLAMA_URL = os.getenv("OLLAMA_URL", "http://ollama:11434")
 
 
 llm = ChatOllama(
     model=MODEL,
+    base_url=OLLAMA_URL,
     temperature=0,
 )
 
