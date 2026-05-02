@@ -32,10 +32,15 @@ async def n8n_node(state: dict):
 
         data = resp.json()
 
+    if isinstance(data, list) and len(data) > 0:
+        data = data[0]
+        
+    if isinstance(data, dict):
+        answer = data.get("answer", data.get("message", "Workflow executado com sucesso."))
+    else:
+        answer = str(data)
+
     return {
         **state,
-        "answer": data.get(
-            "answer",
-            "Workflow executado com sucesso."
-        ),
+        "answer": answer,
     }

@@ -74,6 +74,25 @@ async def planner_node(state: dict):
         }
 
     # -------------------------
+    # rota RAG
+    # -------------------------
+    if any(
+        word in question
+        for word in [
+            "norma",
+            "documento",
+            "manual",
+            "procedimento",
+        ]
+    ):
+        print("[PLANNER] -> RAG")
+
+        return {
+            **state,
+            "route": "rag",
+        }
+
+    # -------------------------
     # fallback LLM
     # -------------------------
     print("[PLANNER] -> LLM")
