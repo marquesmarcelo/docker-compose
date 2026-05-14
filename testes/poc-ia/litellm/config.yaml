@@ -1,0 +1,33 @@
+model_list:
+  - model_name: llama3
+    litellm_params:
+      model: ollama/qwen2.5:3b
+      api_base: "http://ollama:11434"
+    model_info:
+      supports_function_calling: true
+  - model_name: embeddings
+    litellm_params:
+      model: ollama/nomic-embed-text
+      api_base: "http://ollama:11434"
+
+mcp_servers:
+  mcp_test:
+    url: "http://mcp_test:8000/sse"
+    transport: "sse"
+    description: "MCP Test"
+
+litellm_settings:
+  drop_params: true
+  set_verbose: false
+  cache: true
+  cache_type: redis
+  redis_host: redis
+  redis_port: 6379
+  success_callback: ["langfuse", "prometheus"]
+  failure_callback: ["langfuse", "prometheus"]
+
+# Nível raiz, fora do litellm_settings
+environment_variables:
+  LANGFUSE_SECRET_KEY: "sk-lf-80c353e7-9be2-4502-a500-84955141b812" 
+  LANGFUSE_PUBLIC_KEY: "pk-lf-60f55a3d-77d1-45d7-ab22-0a90f677b534"
+  LANGFUSE_HOST: "http://langfuse:3000"

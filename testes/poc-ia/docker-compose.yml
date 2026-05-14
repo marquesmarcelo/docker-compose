@@ -1,32 +1,32 @@
 version: "3.9"
 
 services:
-  agent-gateway:
-    build:
-      context: ./agent-gateway
-    container_name: agent-gateway
-    restart: always
-    depends_on:
-      - ollama
-      - alloydb
-      - mcp-hub
-      - n8n
-    environment:
-      OLLAMA_URL: http://ollama:11434
-      MCP_URL: http://mcp-hub:8000
-      N8N_URL: http://n8n:5678
-      N8N_WEBHOOK: http://n8n:5678/webhook/agent
-      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
-      MODEL_NAME: qwen2.5:3b
-    ports:
-      - "8091:8000"
+  #  agent-gateway:
+  #    build:
+  #      context: ./agent-gateway
+  #    container_name: agent-gateway
+  #    restart: always
+  #    depends_on:
+  #      - ollama
+  #      - alloydb
+  #      - mcp-hub
+  #      - n8n
+  #    environment:
+  #      OLLAMA_URL: http://ollama:11434
+  #      MCP_URL: http://mcp-hub:8000
+  #      N8N_URL: http://n8n:5678
+  #      N8N_WEBHOOK: http://n8n:5678/webhook/agent
+  #      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
+  #      MODEL_NAME: qwen2.5:3b
+  #    ports:
+  #      - "8091:8000"
 
   # =========================
   # Uma API Fake para testes
   # =========================
-  fake-api:
-    build: ./fake-api
-    container_name: fake-api
+  fake_api:
+    build: ./fake_api
+    container_name: fake_api
     depends_on:
       - alloydb
     ports:
@@ -35,28 +35,28 @@ services:
   # =========================
   # MCP para interagir com a API Fake
   # =========================
-  mcp-hub:
-    build: ./mcp-hub
-    container_name: mcp-hub
+  mcp_test:
+    build: ./mcp_test
+    container_name: mcp_test
     environment:
-      API_URL: http://fake-api:8000
+      API_URL: http://fake_api:8000
     depends_on:
-      - fake-api
+      - fake_api
     ports:
       - "8082:8000"
 
   # =========================
   # INGEST / RAG API
   # =========================
-  ingest-api:
-    build: ./ingest-api
-    container_name: ingest-api
+  ingest_api:
+    build: ./ingest_api
+    container_name: ingest_api
     restart: unless-stopped
     depends_on:
       - alloydb
       - ollama
     volumes:
-      - ./ingest-api:/app
+      - ./ingest_api:/app
     ports:
       - "8000:8000"
     environment:
@@ -94,7 +94,7 @@ services:
   # LLM + EMBEDDINGS (GPU)
   # =========================
   ollama:
-    image: ollama/ollama:latest
+    image: ollama/ollama:0.23.4
     container_name: ollama
     restart: unless-stopped
     ports:
@@ -115,15 +115,16 @@ services:
     container_name: openwebui
     restart: unless-stopped
     depends_on:
-      - ollama
+      - litellm
       - alloydb
     ports:
-      - "3000:8080"
+      - "8080:8080"
     environment:
       WEBUI_SECRET_KEY: "troque-esta-chave"
-      ENABLE_OLLAMA_API: "true"
-      OLLAMA_BASE_URL: "http://ollama:11434"
-      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/agentdb"
+      ENABLE_OLLAMA_API: "False"
+      OPENAI_API_BASE_URL: http://litellm:4000/v1
+      OPENAI_API_KEY: sk-1234 # Deve ser a mesma chave definida no LiteLLM
+      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/openwebui"
       ENABLE_DIRECT_CONNECTIONS: "true"
     volumes:
       - openwebui_data:/app/backend/data
@@ -132,7 +133,7 @@ services:
   # REDIS (cache / memory)
   # =========================
   redis:
-    image: redis:7-alpine
+    image: redis:8.8-m03-alpine
     container_name: redis
     restart: unless-stopped
     command: redis-server --appendonly yes
@@ -145,7 +146,7 @@ services:
   # RABBITMQ (fila de jobs)
   # =========================
   rabbitmq:
-    image: rabbitmq:4-management
+    image: rabbitmq:4.3.0-management
     container_name: rabbitmq
     restart: unless-stopped
     environment:
@@ -161,7 +162,7 @@ services:
   # n8n
   # =========================
   n8n:
-    image: n8nio/n8n:latest
+    image: n8nio/n8n:2.20.7-exp.0
     container_name: n8n
     restart: always
     ports:
@@ -175,6 +176,87 @@ services:
     volumes:
       - n8n_data:/home/node/.n8n
 
+  litellm:
+    build:
+      context: ./litellm
+      args:
+        target: runtime
+    image: docker.litellm.ai/berriai/litellm:main-stable
+    container_name: litellm
+    #########################################
+    ## Uncomment these lines to start proxy with a config.yaml file ##
+    # volumes:
+    #  - ./config.yaml:/app/config.yaml
+    # command:
+    #  - "--config=/app/config.yaml"
+    ##############################################
+    ports:
+      - "4000:4000" # Map the container port to the host, change the host port if necessary
+    environment:
+      DATABASE_URL: "postgresql://agent:agent123@alloydb:5432/litellm"
+      LITELLM_MASTER_KEY: "sk-1234"
+      LITELLM_SALT_KEY: "sk-1234"
+      # Optional: route read-only queries (find_*, count, group_by, query_raw/_first)
+      # to a separate reader endpoint, e.g. an Aurora reader. Leave unset for
+      # single-DB deployments. With IAM_TOKEN_DB_AUTH enabled, the reader URL
+      # is auto-refreshed alongside the writer.
+      # DATABASE_URL_READ_REPLICA: "postgresql://llmproxy:dbpassword9090@db-reader:5432/litellm"
+      STORE_MODEL_IN_DB: "True" # allows adding models to proxy via UI
+      REDIS_URL: "redis://redis:6379/0"
+
+      LANGFUSE_PUBLIC_KEY: "pk-lf-1234567890"
+      LANGFUSE_SECRET_KEY: "sk-lf-1234567890"
+      LANGFUSE_HOST: "http://langfuse:3000"
+    depends_on:
+      - alloydb # Indicates that this service depends on the 'db' service, ensuring 'db' starts first
+      - ollama # Indicates that this service depends on the 'ollama' service, ensuring 'ollama' starts first
+    healthcheck:
+      # Defines the health check configuration for the container
+      test:
+        - CMD-SHELL
+        - python3 -c "import urllib.request; urllib.request.urlopen('http://localhost:4000/health/liveliness')" # Command to execute for health check
+      interval: 30s # Perform health check every 30 seconds
+      timeout: 10s # Health check command times out after 10 seconds
+      retries: 3 # Retry up to 3 times if health check fails
+      start_period: 40s # Wait 40 seconds after container start before beginning health checks
+
+  prometheus:
+    image: prom/prometheus:v3
+    volumes:
+      - prometheus_data:/prometheus
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - "9090:9090"
+    command:
+      - "--config.file=/etc/prometheus/prometheus.yml"
+      - "--storage.tsdb.path=/prometheus"
+      - "--storage.tsdb.retention.time=15d"
+    restart: always
+  langfuse:
+    image: langfuse/langfuse:2
+    container_name: langfuse
+    restart: unless-stopped
+    depends_on:
+      alloydb:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=postgresql://agent:agent123@alloydb:5432/langfuse
+      - NEXTAUTH_URL=http://localhost:3000
+      - NEXTAUTH_SECRET=uma_chave_muito_longa_e_aleatoria_com_mais_de_32_caracteres # CHANGEME
+      - SALT=outro_segredo_aleatorio_para_criptografia # CHANGEME
+      # Seed automático
+      - LANGFUSE_INIT_ORG_ID=minha-org
+      - LANGFUSE_INIT_ORG_NAME=MinhaOrg
+      - LANGFUSE_INIT_PROJECT_ID=meu-projeto
+      - LANGFUSE_INIT_PROJECT_NAME=MeuProjeto
+      - LANGFUSE_INIT_PROJECT_PUBLIC_KEY=pk-lf-1234567890
+      - LANGFUSE_INIT_PROJECT_SECRET_KEY=sk-lf-1234567890
+      - LANGFUSE_INIT_USER_EMAIL=admin@admin.com
+      - LANGFUSE_INIT_USER_NAME=admin
+      - LANGFUSE_INIT_USER_PASSWORD=admin123 # CHANGEME
+      - TELEMETRY_ENABLED=false
 volumes:
   alloydb_data:
   ollama_data:
@@ -182,3 +264,4 @@ volumes:
   redis_data:
   rabbitmq_data:
   n8n_data:
+  prometheus_data:

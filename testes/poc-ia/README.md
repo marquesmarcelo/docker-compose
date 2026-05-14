@@ -114,3 +114,34 @@ $ docker run --rm --gpus all nvidia/cuda:12.4.1-base-ubuntu22.04 nvidia-smi
 $ docker exec -it ollama ollama pull qwen2.5:3b
 $ docker exec -it ollama ollama pull nomic-embed-text
 ```
+
+**IMPORTANTE**:
+
+- O modelo qwen2.5:3b não tem suporte a function calling, utilize o modelo qwen2.5:7b caso tenha memória suficiente.
+
+# Prometheus
+
+Para o Prometheus funcionar será necessário realizar configuração pela interface web
+
+2. Verifique o Status no Painel do Prometheus
+Agora, vamos ver se o Prometheus está conseguindo "enxergar" o LiteLLM.
+
+Acesse http://localhost:9090 (Interface do Prometheus).
+
+No menu superior, vá em Status -> Targets.
+
+Procure pelo "job" chamado litellm.
+
+Estado UP (Verde): O Prometheus está lendo o LiteLLM com sucesso.
+
+Estado DOWN (Vermelho): O Prometheus sabe que o LiteLLM existe, mas não consegue alcançá-lo (verifique se no prometheus.yml o target está como litellm:4000).
+
+3. Faça uma Consulta de Teste
+Se o status estiver UP, você já pode ver os dados. Na tela inicial do Prometheus (aba Graph), digite uma destas métricas e clique em Execute:
+
+litellm_deployment_latency_per_output_token_count: LLM Deployment Analytics - Latency per output token
+
+litellm_deployment_success_responses_total: LLM Deployment Analytics - Total number of successful LLM API calls via litellm
+
+
+

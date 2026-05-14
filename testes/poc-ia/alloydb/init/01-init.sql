@@ -1,2 +1,2 @@
 CREATE DATABASE openwebui;
-CREATE DATABASE langfuse;
+CREATE DATABASE litellm;
