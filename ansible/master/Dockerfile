@@ -30,6 +30,7 @@ RUN mkdir /var/run/sshd && \
 # Criar diretório .ssh e copiar a chave pública
 RUN mkdir -p /root/.ssh && \
     chmod -R 700 /root/.ssh && \
+    chmod 600 /root/.ssh/id_rsa &&\
     chown -R root:root /root/.ssh
 
 # Copiar a chave pública e privada do host para o container

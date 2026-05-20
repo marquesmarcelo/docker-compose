@@ -1,8 +1,8 @@
 # Geração da chave (já executado na máquina mãe para ser copiado para os containers)
 ```bash
-ssh-keygen -t rsa -b 4096 -C "ansible@master"
-cp /root/.ssh/* ./master/.ssh/
-cp /root/.ssh/id_rsa.pub ./slave/.ssh/id_rsa.pub
+# ssh-keygen -t rsa -b 4096 -C "ansible@master"
+# cp /root/.ssh/* ./master/.ssh/
+# cp /root/.ssh/id_rsa.pub ./slave/.ssh/id_rsa.pub
 ```
 
 # Inciando a simulação
